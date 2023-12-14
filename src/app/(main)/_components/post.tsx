@@ -13,12 +13,12 @@ import PostMenu from "./post-menu";
 import ReactSection from "./react-section";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { MediaPreview } from "@/components/media/media-preview";
 
 interface PostProps {
-  currentUser: User | null;
+  currentUser: User;
   tweet: FullTweetType;
-  queryKey: string;
-  refresh?: boolean;
+  queryKey?: string;
   className?: string;
 }
 
@@ -26,17 +26,12 @@ export const Post = ({
   tweet,
   currentUser,
   queryKey,
-  refresh,
   className,
 }: PostProps) => {
   const post = tweet.isRetweet && tweet.tweet ? tweet.tweet : tweet;
-  const router = useRouter();
 
   return (
-    <Link
-      href={`/${post.user.username}/${post.id}`}
-      className="flex flex-col relative"
-    >
+    <div className="flex flex-col relative">
       <div
         className={cn(
           "flex flex-col py-2 px-3 pb-1",
@@ -44,62 +39,54 @@ export const Post = ({
           className
         )}
       >
-        {tweet.isRetweet && (
-          <div className="text-sm flex absolute gap-1 top-0.5 left-[48px] items-center text-muted-foreground">
-            <Repeat2 className="h-3 w-3" />@{tweet.user.username} reposted
-          </div>
-        )}
-        <div
-          className={cn(
-            "flex items-start gap-3 mb-3",
-            tweet.isRetweet && "mt-2"
-          )}
-        >
-          <Link href={`/${post.user.username}`}>
-            <Avatar image={post.user.image} />
-          </Link>
-          <div className="flex flex-col w-full">
-            <div className="flex items-center gap-2">
-              <Link
-                href={`/${tweet.user.username}`}
-                className="font-semibold line-clamp-1 hover:underline"
-              >
-                {post.user.name}
-              </Link>
-              <p className="text-muted-foreground line-clamp-1">
-                @{post.user.username}
-              </p>
-              <Dot />
-              <p className="text-muted-foreground">10h</p>
-              <PostMenu
-                tweet={tweet}
-                queryKey={queryKey}
-                currentUser={currentUser}
-              />
+        <Link href={`/${post.user.username}/status/${post.id}`}>
+          {tweet.isRetweet && (
+            <div className="text-sm flex absolute gap-1 top-0.5 left-[48px] items-center text-muted-foreground">
+              <Repeat2 className="h-3 w-3" />@{tweet.user.username} reposted
             </div>
-            <p>{post.caption}</p>
-            {!!post.media.length && (
-              <div className="aspect-[5/5] flex items-center justify-center w-full h-full relative mt-3">
-                <Image
-                  src={post.media[0]}
-                  alt="Photo"
-                  fill
-                  className="rounded-xl border object-cover"
+          )}
+          <div
+            className={cn(
+              "flex items-start gap-3 mb-3",
+              tweet.isRetweet && "mt-2"
+            )}
+          >
+            <Link href={`/${post.user.username}`}>
+              <Avatar image={post.user.image} />
+            </Link>
+            <div className="flex flex-col w-full">
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/${tweet.user.username}`}
+                  className="font-semibold line-clamp-1 hover:underline"
+                >
+                  {post.user.name}
+                </Link>
+                <p className="text-muted-foreground line-clamp-1">
+                  @{post.user.username}
+                </p>
+                <Dot />
+                <p className="text-muted-foreground">10h</p>
+                <PostMenu
+                  tweet={tweet}
+                  queryKey={queryKey}
+                  currentUser={currentUser}
                 />
               </div>
-            )}
+              <p>{post.caption}</p>
+              <MediaPreview tweet={tweet} />
+            </div>
           </div>
-        </div>
-        {tweet.tweet && tweet.isQuote && <ViewOnlyPost tweet={tweet.tweet} />}
+          {tweet.tweet && tweet.isQuote && <ViewOnlyPost tweet={tweet.tweet} />}
+        </Link>
         <ReactSection
           currentUser={currentUser}
           tweet={post}
           queryKey={queryKey}
-          refresh={refresh}
         />
       </div>
       <Separator />
-    </Link>
+    </div>
   );
 };
 

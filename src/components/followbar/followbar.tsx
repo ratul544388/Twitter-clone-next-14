@@ -36,7 +36,7 @@ const Followbar: React.FC<FollowbarProps> = ({ currentUser }) => {
           loadOnces
         />
         <Link
-          href={`/${currentUser.username}/follow`}
+          href={`/${currentUser.username}/who-to-follow`}
           className={buttonVariants({
             variant: "link",
           })}

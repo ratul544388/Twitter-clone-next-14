@@ -55,9 +55,9 @@ export const SearchInput = ({
 
   useEffect(() => {
     if (value) {
-      setOpenCard(false);
+      setOpenCard(true);
     }
-  }, [searchParams, value, openCard]);
+  }, [value, openCard]);
 
   const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();

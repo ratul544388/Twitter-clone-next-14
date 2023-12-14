@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar } from "@/components/avatar";
 import { cn } from "@/lib/utils";
 import { FullCommunityType } from "@/types";
 import Image from "next/image";

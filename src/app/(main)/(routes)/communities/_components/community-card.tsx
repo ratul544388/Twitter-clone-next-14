@@ -36,6 +36,29 @@ export const CommunityCard = ({ community }: CommunityCardProps) => {
   );
 };
 
+CommunityCard.Row = function CommunityCardRow({
+  community,
+}: {
+  community: FullCommunityType;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="w-[110px] relative aspect-[6/5] rounded-lg overflow-hidden bg-accent/50 hover:bg-accent">
+        <Image
+          src={community.coverPhoto}
+          alt="cover photo"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="space-y-2 px-2">
+        <h1 className="text-sm font-semibold line-clamp-1">{community.name}</h1>
+        <CircularPhotos community={community} />
+      </div>
+    </div>
+  );
+};
+
 CommunityCard.Skeleton = function CommunityCardSkeleton({
   count,
 }: {

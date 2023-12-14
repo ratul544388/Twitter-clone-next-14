@@ -1,15 +1,15 @@
 import getCurrentUser from "@/actions/get-current-user";
+import { FollowButton } from "@/components/follow-button";
+import FollowersInfo from "@/components/followers-info";
 import { CoverPhoto } from "@/components/media/cover-photo";
 import { ProfilePhoto } from "@/components/media/profile-photo";
+import { Button } from "@/components/ui/button";
 import db from "@/lib/db";
 import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { redirect } from "next/navigation";
 import Header from "../../../_components/header";
 import ProfileTweets from "../_components/profile-tweets";
-import { Button } from "@/components/ui/button";
-import { FollowButton } from "@/components/follow-button";
-import FollowersInfo from "@/components/followers-info";
 
 const UsernamePage = async ({ params }: { params: { username: string } }) => {
   const user = await db.user.findUnique({

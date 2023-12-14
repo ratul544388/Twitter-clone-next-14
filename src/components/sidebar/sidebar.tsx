@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
   return (
     <div className={cn("border-r", className)}>
       <div className="sticky h-screen inset-y-0 left-0 flex flex-col items-center sm:items-end xl:items-start sm:px-5 px-1 py-1">
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col w-full h-full">
           <Link href="/">
             <Icon
               icon={AiOutlineTwitter}
@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
               href={route.href}
               key={route.label}
               className={cn(
-                "flex capitalize xl:w-auto w-fit items-center gap-4 xl:py-2.5 px-3 py-3 hover:bg-blue-50 rounded-full text:md cursor-pointer opacity-90 font-medium",
+                "flex w-fit capitalize xl:w-auto items-center gap-4 xl:py-2.5 px-3 py-3 hover:bg-blue-50 rounded-full text:md cursor-pointer opacity-90 font-medium",
                 route.active && "opacity-100 font-semibold"
               )}
             >

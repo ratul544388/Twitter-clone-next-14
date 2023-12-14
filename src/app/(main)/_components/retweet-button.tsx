@@ -16,10 +16,9 @@ import { PencilLine, Repeat2 } from "lucide-react";
 interface RetweetButtonProps {
   currentUser: User | null;
   tweet: FullTweetType;
-  queryKey: string;
+  queryKey?: string;
   iconSize?: number;
   hideNumber?: boolean;
-  refresh?: boolean;
 }
 
 const RetweetButton: React.FC<RetweetButtonProps> = ({
@@ -28,7 +27,6 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
   queryKey,
   iconSize,
   hideNumber,
-  refresh,
 }) => {
   const { onOpen } = useModal();
 

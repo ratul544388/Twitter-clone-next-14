@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 interface PostMenuProps {
   currentUser: User | null;
   tweet: FullTweetType;
-  queryKey: string;
+  queryKey?: string;
 }
 
 const PostMenu: React.FC<PostMenuProps> = ({
@@ -25,7 +25,6 @@ const PostMenu: React.FC<PostMenuProps> = ({
   queryKey,
   currentUser,
 }) => {
-  const queryClient = useQueryClient();
   const { onOpen } = useModal();
   const origin = useOrigin();
   let menu = [
@@ -46,12 +45,12 @@ const PostMenu: React.FC<PostMenuProps> = ({
       {
         label: "Edit",
         icon: Edit,
-        onClick: () => onOpen("tweetModal", { tweet }),
+        onClick: () => onOpen("tweetModal", { tweet, queryKey }),
       },
       {
         label: "Delete",
         icon: Trash,
-        onClick: () => {}
+        onClick: () => onOpen("deleteTweetModal", { tweet, queryKey }),
       },
     ];
   }

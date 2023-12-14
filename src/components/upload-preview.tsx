@@ -6,9 +6,14 @@ import Icon from "./icon";
 interface UploadPreviewProps {
   value: string[];
   onChange: (value: string[]) => void;
+  className?: string;
 }
 
-export const UploadPreview = ({ value, onChange }: UploadPreviewProps) => {
+export const UploadPreview = ({
+  value,
+  onChange,
+  className,
+}: UploadPreviewProps) => {
   if (value.length === 0) return null;
 
   const onRemove = (url: string) => {
@@ -18,11 +23,12 @@ export const UploadPreview = ({ value, onChange }: UploadPreviewProps) => {
   return (
     <div
       className={cn(
-        "pb-2 border-b-[1.5px] mb-2 ml-[50px] grid gap-2 grid-cols-1",
+        "pb-2 border-b-[1.5px] pl-[50px] mb-2 grid gap-2 grid-cols-1",
         value.length === 2 && "grid-cols-2",
-        value.length === 3 && "grid-cols-3",
-        value.length === 4 && "grid-cols-4",
-        value.length === 5 && "grid-cols-5"
+        value.length >= 3 && "grid-cols-3",
+        // value.length === 4 && "grid-cols-4",
+        // value.length === 5 && "grid-cols-5",
+        className
       )}
     >
       {value.map((item) => (

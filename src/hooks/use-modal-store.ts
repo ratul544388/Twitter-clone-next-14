@@ -15,7 +15,8 @@ export type ModalType =
   | "logoutModal"
   | "cancelCommunityRequestModal"
   | "makingCommunityAdminModal"
-  | "kickCommunityModal";
+  | "kickCommunityModal"
+  | "mediaViewerModal"
 
 interface ModalData {
   user?: User;

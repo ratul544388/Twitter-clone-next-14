@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useForm } from "react-hook-form";
@@ -38,7 +37,6 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
   });
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [previewMedia, setPreviewMedia] = useState(form.getValues("media"));
 
   const isLoading = form.formState.isSubmitting;
 
@@ -95,15 +93,20 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
           />
         </div>
         <UploadPreview
-          value={previewMedia}
-          onChange={(value) => setPreviewMedia(value)}
+          value={media}
+          onChange={(value) =>
+            form.setValue("media", value, {
+              shouldValidate: true,
+            })
+          }
         />
         <div className="flex relative items-center pl-[42px]">
           <MediaUpload
             endPoint="multiMedia"
             onChange={(value) => {
-              form.setValue("media", [...media, ...(value as string[])]);
-              setPreviewMedia([...media, ...(value as string[])]);
+              form.setValue("media", [...media, ...(value as string[])], {
+                shouldValidate: true,
+              });
             }}
             disabled={isLoading}
           />

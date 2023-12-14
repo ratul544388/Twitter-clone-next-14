@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 import { LoadingError } from "../../../../../components/loading-error";
 import { CommunityCard } from "./community-card";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CommunityListProps {
   variant?: "COLUMN" | "ROW";
@@ -64,7 +65,16 @@ export const CommunityList = ({ variant = "COLUMN" }: CommunityListProps) => {
   }, [searchParams, refetch]);
 
   if (status === "pending") {
-    return <CommunityCard.Skeleton count={5} />;
+    return variant === "ROW" ? (
+      <div className="flex items-center gap-3 px-3">
+        <Skeleton className="w-[100px] aspect-[6/8]" />
+        <Skeleton className="w-[100px] aspect-[6/8]" />
+        <Skeleton className="w-[100px] aspect-[6/8]" />
+        <Skeleton className="w-[100px] aspect-[6/8] hidden xs:block" />
+      </div>
+    ) : (
+      <CommunityCard.Skeleton count={5} />
+    );
   }
 
   if (status === "error") {
@@ -82,7 +92,11 @@ export const CommunityList = ({ variant = "COLUMN" }: CommunityListProps) => {
         >
           {page?.items?.map((community: FullCommunityType) => (
             <Fragment key={community.id}>
-              <CommunityCard community={community} />
+              {variant === "ROW" ? (
+                <CommunityCard.Row community={community} />
+              ) : (
+                <CommunityCard community={community} />
+              )}
             </Fragment>
           ))}
         </div>

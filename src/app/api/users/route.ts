@@ -66,6 +66,11 @@ export async function GET(req: Request) {
               id: {
                 not: currentUser.id,
               },
+              followers: {
+                none: {
+                  followerId: currentUser.id,
+                },
+              },
             }
           : type === "FOLLOWERS"
           ? {

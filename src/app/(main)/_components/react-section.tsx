@@ -1,17 +1,15 @@
-import Icon from "@/components/icon";
 import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
-import { MessageCircle } from "lucide-react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { HeartButton } from "./heart-button";
+import { ReplyButton } from "./reply-button";
 import RetweetButton from "./retweet-button";
 import ShareButton from "./share-button";
-import { useModal } from "@/hooks/use-modal-store";
 
 interface ReactSectionProps {
-  currentUser: User | null;
+  currentUser: User;
   tweet: FullTweetType;
-  queryKey: string;
+  queryKey?: string;
   refresh?: boolean;
   className?: string;
 }
@@ -23,60 +21,23 @@ const ReactSection: React.FC<ReactSectionProps> = ({
   refresh,
   className,
 }) => {
-  const { onOpen } = useModal();
-
-  const hasLike = tweet.likes.some((like) => like.id === currentUser?.id);
-
-  const replies = tweet.retweets.filter((tweet) => tweet.isReply);
 
   return (
     <div
       onClick={(e) => e.stopPropagation()}
       className={cn(
-        "flex justify-between ml-[42px] mt-2 text-muted-foreground",
+        "flex justify-between pl-[42px] text-muted-foreground",
         className
       )}
     >
-      <div
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onOpen("replyModal", { tweet });
-        }}
-        className={cn(
-          "flex items-center cursor-pointer group hover:text-primary"
-        )}
-      >
-        <Icon
-          icon={MessageCircle}
-          className=" group-hover:bg-sky-50"
-          iconSize={20}
-        />
-        {replies.length}
-      </div>
+      <ReplyButton tweet={tweet} queryKey={queryKey} refresh/>
       <RetweetButton
         tweet={tweet}
         currentUser={currentUser}
         queryKey={queryKey}
         iconSize={20}
       />
-      <div
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        className={cn(
-          "flex items-center cursor-pointer group hover:text-rose-500",
-          hasLike && "text-rose-500"
-        )}
-      >
-        <Icon
-          icon={hasLike ? AiFillHeart : AiOutlineHeart}
-          className=" group-hover:bg-rose-50"
-          iconSize={20}
-        />
-        {tweet.likes.length}
-      </div>
+      <HeartButton tweet={tweet} currentUser={currentUser} size={20} />
       <ShareButton />
     </div>
   );

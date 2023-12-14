@@ -45,7 +45,6 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
   });
   const caption = form.getValues("caption");
   const media = form.getValues("media");
-  const [mediaPreview, setMediaPreview] = useState(media);
   const queryClient = useQueryClient();
   const open = isOpen && type === "tweetModal";
   const tweet = data.tweet;
@@ -58,12 +57,11 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
   useEffect(() => {
     if (tweet) {
       form.setValue("caption", tweet.caption);
-      form.setValue("media", tweet.media);
-      setMediaPreview(tweet.media);
+      form.setValue("media", tweet.media, { shouldValidate: true });
     }
   }, [data, form, tweet]);
 
-  const isLoading = form.formState.isSubmitting;
+const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -144,16 +142,20 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
           </form>
         </Form>
         <UploadPreview
-          value={mediaPreview}
-          onChange={(value) => setMediaPreview(value)}
+          value={media}
+          onChange={(value) =>
+            form.setValue("media", value, { shouldValidate: true })
+          }
+          className="pr-6 pl-[76px]"
         />
         <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
           <div className="flex">
             <MediaUpload
               endPoint="multiMedia"
               onChange={(value) => {
-                form.setValue("media", [...media, ...(value as string[])]);
-                setMediaPreview([...media, ...(value as string[])]);
+                form.setValue("media", [...media, ...(value as string[])], {
+                  shouldValidate: true,
+                });
               }}
               disabled={isLoading}
             />
