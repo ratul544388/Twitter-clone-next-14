@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-import { NavigationType } from "@/types";
+import { QueryType } from "@/types";
 
 interface HeaderNavigationsProps {
-  navigations: NavigationType[];
-  active: NavigationType;
+  navigations: QueryType[];
+  active: QueryType;
   border?: boolean;
-  onChange: (value: NavigationType) => void;
+  onChange: (value: QueryType) => void;
 }
 
 const HeaderNavigations: React.FC<HeaderNavigationsProps> = ({
@@ -15,7 +15,7 @@ const HeaderNavigations: React.FC<HeaderNavigationsProps> = ({
   onChange,
 }) => {
   return (
-    <div className={cn("flex justify-between", border && "border-b-[1.5px]")}>
+    <div className={cn("flex justify-between select-none", border && "border-b-[1.5px]")}>
       {navigations.map((item) => (
         <div
           onClick={() => onChange(item)}

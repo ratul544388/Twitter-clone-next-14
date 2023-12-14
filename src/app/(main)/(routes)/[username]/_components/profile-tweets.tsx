@@ -3,7 +3,7 @@
 import HeaderNavigations from "@/app/(main)/_components/header-navigations";
 import { Post } from "@/app/(main)/_components/post";
 import { LoadingError } from "@/components/loading-error";
-import { FullTweetType, NavigationType } from "@/types";
+import { FullTweetType, QueryType } from "@/types";
 import { User } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import qs from "query-string";
@@ -16,8 +16,8 @@ interface ProfileTweetsProps {
 }
 
 const ProfileTweets: React.FC<ProfileTweetsProps> = ({ currentUser, user }) => {
-  const navigations: NavigationType[] = ["TWEETS", "REPLIES", "LIKES", "MEDIA"];
-  const [active, setActive] = useState<NavigationType>("TWEETS");
+  const navigations: QueryType[] = ["TWEETS", "REPLIES", "LIKES", "MEDIA"];
+  const [active, setActive] = useState<QueryType>("TWEETS");
   const { ref, inView } = useInView();
 
   const queryKey = `SEARCHED_${active}`;
@@ -60,7 +60,7 @@ const ProfileTweets: React.FC<ProfileTweetsProps> = ({ currentUser, user }) => {
       {status === "pending" ? (
         <Post.Skeleton
           count={active === "MEDIA" ? 3 : 6}
-          photo={active === "MEDIA"}
+          media={active === "MEDIA"}
         />
       ) : status === "error" ? (
         <LoadingError />
@@ -83,7 +83,7 @@ const ProfileTweets: React.FC<ProfileTweetsProps> = ({ currentUser, user }) => {
           {isFetchingNextPage && (
             <Post.Skeleton
               count={7}
-              photo={active === "MEDIA" ? true : false}
+              media={active === "MEDIA" ? true : false}
             />
           )}
         </div>

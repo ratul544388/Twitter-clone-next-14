@@ -1,13 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { useModal } from "@/hooks/use-modal-store";
 import { useRoutes } from "@/hooks/use-routes";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { useModal } from "@/hooks/use-modal-store";
 import Icon from "./icon";
 
 export const BottomNavbar = () => {
@@ -17,11 +16,11 @@ export const BottomNavbar = () => {
   const routes = useRoutes({ isBottomNavbar: true });
   const { onOpen } = useModal();
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const currentScrollPos = window.scrollY;
     setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 60);
     setPrevScrollPos(currentScrollPos);
-  };
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

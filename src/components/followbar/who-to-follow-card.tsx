@@ -1,13 +1,12 @@
 "use client";
 
-import { User } from "@prisma/client";
-import { People } from "../poeple";
 import { FullUserType } from "@/types";
+import { User } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import qs from "query-string";
-import { useRouter } from "next/navigation";
-import { Fragment } from "react";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import qs from "query-string";
+import { Fragment } from "react";
 import { LoadingError } from "../loading-error";
 import { SingleUser } from "../single-user";
 
@@ -43,12 +42,13 @@ const WhoToFollowCard: React.FC<WhoToFollowCardProps> = ({ currentUser }) => {
     });
 
   if (status === "pending") {
-    return <People.Skeleton hasFollowButton count={3} />;
+    return <SingleUser.Skeleton count={5} />;
   }
 
   if (status === "error") {
     return <LoadingError />;
   }
+
   return (
     <div className="border shadow-sm py-3 rounded-2xl flex flex-col gap-3">
       <h1 className="font-bold text-xl p-4 py-1 pb-0">Who to follow</h1>

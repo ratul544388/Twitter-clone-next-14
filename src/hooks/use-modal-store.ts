@@ -1,27 +1,31 @@
 import { FullTweetType } from "@/types";
-import { User } from "@prisma/client";
+import { Community, Member, User } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType =
-  | "editTweetModal"
   | "deleteTweetModal"
   | "editProfileModal"
   | "registerModal"
-  | "loginModal"
   | "tweetModal"
   | "quoteTweetModal"
   | "replyModal"
-  | "createCommunityModal"
+  | "communityModal"
+  | "deleteCommunityModal"
   | "leaveCommunityModal"
   | "logoutModal"
   | "cancelCommunityRequestModal"
   | "makingCommunityAdminModal"
-  | "kickCommunityModal"
-  | "imageModal";
+  | "kickCommunityModal";
 
 interface ModalData {
   user?: User;
   tweet?: FullTweetType;
+  communityId?: string | null;
+  community?: Community;
+  member?: Member & {
+    user: User;
+  };
+  queryKey?: string;
 }
 
 interface ModalStore {

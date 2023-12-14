@@ -17,7 +17,7 @@ module.exports = {
     },
     extend: {
       gridTemplateColumns: {
-        "20": "repeat(20, minmax(0, 1fr))",
+        20: "repeat(20, minmax(0, 1fr))",
       },
       gridColumn: {
         "span-13": "span 13 / span 13",
@@ -26,7 +26,7 @@ module.exports = {
         "span-20": "span 20 / span 20",
       },
       screens: {
-        "xs": "500px"
+        xs: "500px",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -84,5 +84,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
 };

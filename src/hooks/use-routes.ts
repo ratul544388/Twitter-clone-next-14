@@ -55,8 +55,8 @@ export const useRoutes = ({
     {
       label: "Communities",
       icon: pathname.includes("communities") ? BsPeopleFill : BsPeople,
-      href: "/communities",
-      active: ["/communities"].includes(pathname),
+      href: `/communities`,
+      active: [`/communities`].includes(pathname),
     },
     {
       label: "Blue badge",
@@ -103,7 +103,7 @@ export const useRoutes = ({
     ];
   }
 
-  if(isBottomNavbar){
+  if (isBottomNavbar) {
     routes = [
       {
         label: "home",
@@ -129,7 +129,7 @@ export const useRoutes = ({
         href: "/messages",
         active: pathname === "/messages",
       },
-    ]
+    ];
   }
 
   return routes;

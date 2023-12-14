@@ -1,46 +1,70 @@
 "use client";
-import { useMutationHook } from "@/hooks/use-mutation-hook";
-import { cn } from "@/lib/utils";
-import { FullUserType } from "@/types";
-import { User } from "@prisma/client";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { User } from "@prisma/client";
+import { FullUserType } from "@/types";
 
 interface FollowButtonProps {
   user: FullUserType;
-  currentUser: User;
-  className?: string;
+  currentUser?: User;
   queryKey: string;
+  className?: string;
 }
 
-const FollowButton: React.FC<FollowButtonProps> = ({
+export const FollowButton = ({
   user,
   currentUser,
-  className,
   queryKey,
-}) => {
-  const isFollowing = user.followers.some(
-    (follower) => follower.followerId === currentUser.id
-  );
+  className,
+}: FollowButtonProps) => {
+  const isFollowing = user.followers.some((follower) => {
+    return follower.followerId === currentUser?.id;
+  });
 
-  const { isPending, mutate } = useMutationHook({
-    api: "/api/follow",
-    method: "post",
-    data: { userId: user.id },
-    queryKey: queryKey,
-    refresh: true,
-    success: "Followed",
+  const QueryClient = useQueryClient();
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      if (isFollowing) {
+        await axios.post(`/api/unfollow`, {
+          userId: user.id,
+        });
+      } else {
+        await axios.post(`/api/follow`, {
+          userId: user.id,
+        });
+      }
+    },
+    onSuccess: () => {
+      if (isFollowing) {
+        toast.success(`You unfollowed @${user.username}`);
+      } else {
+        toast.success(`You followed @${user.username}`);
+      }
+      QueryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
   });
 
   return (
     <Button
-      disabled={isPending}
       className={cn(className)}
       onClick={() => mutate()}
+      disabled={isPending}
       variant={isFollowing ? "outline" : "default"}
     >
       {isFollowing ? "Following" : "Follow"}
     </Button>
   );
 };
-
-export default FollowButton;

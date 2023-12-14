@@ -28,13 +28,21 @@ const Textarea: React.FC<TextareaProps> = ({
   const { isOpen } = useModal();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+
   useEffect(() => {
     if (autoFocus && isOpen) {
       setTimeout(() => {
         inputRef?.current?.focus();
-      }, 500);
+      }, 1000);
     }
   }, [autoFocus, isOpen]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+    }
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);

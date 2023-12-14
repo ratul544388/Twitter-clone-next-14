@@ -1,5 +1,6 @@
 import getCurrentUser from "@/actions/get-current-user";
 import { SearchClient } from "./search-client";
+import { redirect } from "next/navigation";
 
 const ExplorePage = async ({
   searchParams,
@@ -9,7 +10,11 @@ const ExplorePage = async ({
   const currentUser = await getCurrentUser();
   const q = searchParams.q as string;
 
-  return <SearchClient currentUser={currentUser} q={q} />;
+  if (!q) {
+    redirect("/explore");
+  }
+
+  return <SearchClient currentUser={currentUser} />;
 };
 
 export default ExplorePage;

@@ -70,10 +70,12 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
       if (tweet) {
         await axios.patch(`/api/tweets/${tweet.id}`, {
           ...values,
+          communityId: data.communityId,
         });
       } else {
         await axios.post("/api/tweets", {
           ...values,
+          communityId: data.communityId,
         });
       }
       toast.success(tweet ? "Tweet updated" : "Tweet posted");
@@ -100,13 +102,16 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
           open && "opacity-100"
         )}
       >
-        <div className="sticky h-[50px] bg-background/80">
+        <div className="sticky flex items-center justify-center h-[50px] bg-background/80">
           <Icon
             onClick={handleClose}
             icon={X}
             iconSize={20}
             className="absolute left-1 top-1/2 -translate-y-1/2"
           />
+          <h1 className="font-semibold text-muted-foreground">
+            {data.communityId && "Community post"}
+          </h1>
         </div>
         <Form {...form}>
           <form
@@ -133,7 +138,6 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
                       autoFocus
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -165,7 +169,12 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
               className="h-6 w-6"
               strokeWidth={15}
             />
-            <Button>Tweet</Button>
+            <Button
+              disabled={isLoading || !caption.trim()}
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Tweet
+            </Button>
           </div>
         </div>
       </div>

@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useModal } from "@/hooks/use-modal-store";
-import { useMutationHook } from "@/hooks/use-mutation-hook";
 import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { PencilLine, Repeat2 } from "lucide-react";
@@ -33,13 +32,13 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
 }) => {
   const { onOpen } = useModal();
 
-  const { mutate } = useMutationHook({
-    api: `/api/tweets/${tweet.id}/retweet`,
-    method: "post",
-    queryKey,
-    success: "success",
-    refresh,
-  });
+  // const { mutate } = useMutationHook({
+  //   api: `/api/tweets/${tweet.id}/retweet`,
+  //   method: "post",
+  //   queryKey,
+  //   success: "success",
+  //   refresh,
+  // });
 
   const isRetweet = tweet.retweets.some(
     (tweet) => tweet.isRetweet && tweet.userId === currentUser?.id
@@ -65,7 +64,6 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
         <DropdownMenuItem
-          onClick={() => mutate()}
           className={cn(isRetweet && "text-red-500")}
         >
           <Repeat2 className="h-4 w-4 mr-2" />

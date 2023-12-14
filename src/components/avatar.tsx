@@ -10,6 +10,7 @@ interface AvatarProps {
   onClick?: () => void;
   imageUpload?: (value: string) => void;
   disabled?: boolean;
+  size?: number;
 }
 
 export const Avatar = ({
@@ -18,14 +19,16 @@ export const Avatar = ({
   onClick,
   imageUpload,
   disabled,
+  size = 40,
 }: AvatarProps) => {
   return (
     <div
       onClick={onClick}
       className={cn(
-        "min-h-[40px] min-w-[40px] relative rounded-full overflow-hidden",
+        "aspect-square relative rounded-full overflow-hidden",
         classname
       )}
+      style={{ minWidth: `${size}px`, width: `${size}px` }}
     >
       <Image
         src={image || "/images/placeholder.jpg"}

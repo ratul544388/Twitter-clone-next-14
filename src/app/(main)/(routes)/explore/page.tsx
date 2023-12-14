@@ -1,7 +1,4 @@
 import getCurrentUser from "@/actions/get-current-user";
-import { redirect } from "next/navigation";
-import React from "react";
-import Header from "../../_components/header";
 import { ExploreClient } from "./explore-client";
 
 const ExplorePage = async ({

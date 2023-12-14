@@ -7,7 +7,7 @@ import { User } from "@prisma/client";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useForm } from "react-hook-form";

@@ -61,7 +61,7 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/tweets/${tweet?.id}/reply`, {
+      await axios.post(`/api/tweets/${tweet?.id}/reply`, {
         ...values,
       });
       toast.success("Replied");
@@ -156,7 +156,7 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
             />
             <Button
               disabled={isLoading || !caption.trim()}
-              onSubmit={form.handleSubmit(onSubmit)}
+              onClick={form.handleSubmit(onSubmit)}
             >
               Reply
             </Button>

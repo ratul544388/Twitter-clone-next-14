@@ -1,5 +1,10 @@
 "use client";
+import { CommunityModal } from "@/components/modals/community-modal";
+import { DeleteCommunityModal } from "@/components/modals/delete-community-modal";
 import { EditProfileModal } from "@/components/modals/edit-profile-modal";
+import { KickCommunityModal } from "@/components/modals/kick-community-modal";
+import { LeaveCommunityModal } from "@/components/modals/leave-community-modal";
+import { MakingCommunityAdminModal } from "@/components/modals/making-community-admin-modal";
 import { QuoteTweetModal } from "@/components/modals/quote-tweet-modal";
 import { ReplyModal } from "@/components/modals/reply-modal";
 import { TweetModal } from "@/components/modals/tweet-modal";
@@ -23,6 +28,11 @@ const ModalProvider = ({ currentUser }: { currentUser: User | null }) => {
       <EditProfileModal currentUser={currentUser} />
       <QuoteTweetModal currentUser={currentUser} />
       <ReplyModal currentUser={currentUser} />
+      <CommunityModal />
+      <KickCommunityModal />
+      <MakingCommunityAdminModal />
+      <LeaveCommunityModal />
+      <DeleteCommunityModal />
     </>
   );
 };

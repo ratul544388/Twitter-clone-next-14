@@ -1,11 +1,11 @@
 import getCurrentUser from "@/actions/get-current-user";
 import db from "@/lib/db";
-import { NavigationType } from "@/types";
+import { QueryType } from "@/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { caption, media } = await req.json();
+    const { caption, media, communityId } = await req.json();
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
         userId: currentUser.id,
         caption,
         media,
+        ...(communityId ? { communityId, isCommunity: true } : {}),
       },
     });
 
@@ -36,11 +37,13 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
 
     const cursor = searchParams.get("cursor");
-    const type = searchParams.get("type") as NavigationType;
+    const type = searchParams.get("type") as QueryType;
     const tweetId = searchParams.get("tweetId");
     const userId = searchParams.get("userId");
+    const communityId = searchParams.get("communityId");
+    const q = searchParams.get("q");
 
-    const TWEETS_BATCH = 5;
+    const TWEETS_BATCH = 10;
 
     const tweets = await db.tweet.findMany({
       where: {
@@ -49,7 +52,7 @@ export async function GET(req: Request) {
               user: {
                 followers: {
                   some: {
-                    id: currentUser?.id,
+                    followerId: currentUser?.id,
                   },
                 },
               },
@@ -61,11 +64,15 @@ export async function GET(req: Request) {
                   id: currentUser?.id,
                 },
               },
+              isReply: false,
+              isCommunity: false,
             }
           : type === "REPLIES" && userId
           ? {
               OR: [{ isRetweet: true }, { isQuote: true }],
               userId,
+              isReply: false,
+              isCommunity: false,
             }
           : type === "MEDIA" && userId
           ? {
@@ -73,19 +80,39 @@ export async function GET(req: Request) {
                 isEmpty: false,
               },
               userId,
+              isReply: false,
+              isCommunity: false,
             }
           : type === "TWEETS" && userId
           ? {
               isReply: false,
               isQuote: false,
               isRetweet: false,
+              isCommunity: false,
               userId,
+            }
+          : type === "COMMUNITIES_TWEETS"
+          ? {
+              community: {
+                members: {
+                  some: {
+                    userId: currentUser.id,
+                  },
+                },
+              },
+              isReply: false,
+            }
+          : type === "TWEETS" && communityId
+          ? {
+              isReply: false,
+              communityId,
             }
           : type === "FOR YOU"
           ? {
               isReply: false,
+              isCommunity: false,
             }
-          : type === "REPLIES" && tweetId
+          : type === "REPLIES" && userId
           ? {
               OR: [
                 {
@@ -102,6 +129,42 @@ export async function GET(req: Request) {
               tweet: {
                 id: tweetId,
               },
+            }
+          : (type === "TWEETS" || type === "MEDIA") && q
+          ? {
+              OR: [
+                {
+                  user: {
+                    OR: [
+                      {
+                        name: {
+                          contains: q,
+                          mode: "insensitive",
+                        },
+                      },
+                      {
+                        username: {
+                          contains: q,
+                          mode: "insensitive",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  caption: {
+                    contains: q,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+              ...(type === "MEDIA"
+                ? {
+                    media: {
+                      isEmpty: false,
+                    },
+                  }
+                : {}),
             }
           : {}),
       },

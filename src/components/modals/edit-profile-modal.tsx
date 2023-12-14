@@ -9,28 +9,35 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-import { useState } from "react";
 import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { X } from "lucide-react";
-import { Avatar } from "../avatar";
-import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import "react-circular-progressbar/dist/styles.css";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Icon from "../icon";
-import { Input } from "../ui/input";
+import { CoverPhoto } from "../media/cover-photo";
 import Textarea from "../textarea";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useEffect } from "react";
+import { ProfilePhoto } from "../media/profile-photo";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(30),
-  username: z.string().min(2).max(20),
-  bio: z.string().max(500),
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(1, { message: "Name is required" })
+    .max(30, { message: "Name can not be more than 30 characters in length" }),
+  username: z
+    .string({ required_error: "Username is required" })
+    .min(1, { message: "Username is requried" })
+    .max(20, { message: "Username can be more than 30 characters in length" }),
+  bio: z
+    .string()
+    .max(500, { message: "Bio cannot be more than 500 characters in length" }),
   image: z.string(),
   coverPhoto: z.string(),
 });
@@ -39,34 +46,47 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
   const router = useRouter();
   const { isOpen, onClose, data, type } = useModal();
 
-  const open = isOpen && type === "editProfileModal";
-
-  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: currentUser.name,
       username: currentUser.username,
       bio: currentUser.bio || "",
-      image: currentUser.image || "",
+      image: currentUser.image,
       coverPhoto: currentUser.coverPhoto || "",
     },
   });
 
+  useEffect(() => {
+    form.setValue("coverPhoto", currentUser.coverPhoto || "");
+    form.setValue("image", currentUser.image);
+    form.setValue("name", currentUser.name);
+    form.setValue("username", currentUser.username);
+    form.setValue("bio", currentUser.bio || "");
+  }, [currentUser, form, isOpen]);
+
+  const open = isOpen && type === "editProfileModal";
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/tweets`, {
+      const { data } = await axios.post(`/api/edit-profile`, {
         ...values,
       });
-      toast.success("Tweet posted");
-      form.reset();
-      queryClient.invalidateQueries([
-        "FOR YOU",
-        "FOLLOWING",
-      ] as InvalidateQueryFilters);
-    } catch (error) {
-      toast.error("Something went wrong");
+      onClose();
+      router.refresh();
+      router.push(`${data.username}`);
+    } catch (error: any) {
+      if (error?.response?.status === 409) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
+  };
+
+  const handleClose = () => {
+    form.reset();
+    onClose();
   };
 
   return (
@@ -85,25 +105,25 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
         )}
       >
         <div className="sticky h-[50px] bg-background/80">
-          <Icon icon={X} className="absolute left-1 top-1/2 -translate-y-1/2" />
+          <Icon
+            onClick={handleClose}
+            icon={X}
+            className="absolute left-1 top-1/2 -translate-y-1/2"
+          />
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 p-6"
+            className="overflow-y-auto"
+            style={{ maxHeight: "calc(100vh - 180px" }}
           >
             <FormField
               control={form.control}
-              name="name"
+              name="coverPhoto"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
-                    <Input
-                      value={field.value}
-                      onChange={field.onChange}
-                      label="Full name"
-                      limit={30}
-                    />
+                    <CoverPhoto value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,42 +131,73 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
             />
             <FormField
               control={form.control}
-              name="username"
+              name="image"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem className="w-full relative">
                   <FormControl>
-                    <Input
+                    <ProfilePhoto
                       value={field.value}
                       onChange={field.onChange}
-                      label="Username"
-                      limit={30}
+                      className="absolute -translate-y-1/2 left-3"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Textarea
-                      value={field.value}
-                      onChange={field.onChange}
-                      label="Bio"
-                      limit={30}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-6 mt-16 p-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input {...field} label="Full name" limit={300} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input {...field} label="Username" limit={30} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Textarea
+                        value={field.value as string}
+                        onChange={field.onChange}
+                        label="Bio"
+                        limit={300}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </form>
         </Form>
-        <div className="sticky bg-background py-2 px-3 border-t flex items-center">
-          <Button className="ml-auto">Save</Button>
+        <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
+          <Button
+            disabled={form.formState.isSubmitting}
+            className="ml-auto"
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            Save
+          </Button>
         </div>
       </div>
     </div>

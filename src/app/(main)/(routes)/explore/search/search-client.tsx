@@ -1,55 +1,23 @@
 "use client";
 
+import { Feed } from "@/app/(main)/_components/feed";
 import Header from "@/app/(main)/_components/header";
-import { Post } from "@/app/(main)/_components/post";
-import { LoadingError } from "@/components/loading-error";
-import { SingleUser } from "@/components/single-user";
-import TweetSkeletons from "@/components/skeletons/tweet-skeletons";
-import { FullTweetType, FullUserType, NavigationType } from "@/types";
-import { User } from "@prisma/client";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import qs from "query-string";
-import { Fragment, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import { UserList } from "@/app/(main)/_components/user-list";
+import { SearchInput } from "@/components/search-input";
+import { FullUserType, QueryType } from "@/types";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface SearchClientProps {
-  q: string;
   currentUser: FullUserType;
 }
 
-export const SearchClient = ({ q, currentUser }: SearchClientProps) => {
-  const navigations: NavigationType[] = ["TWEETS", "PEOPLE", "MEDIA"];
-  const [active, setActive] = useState<NavigationType>("TWEETS");
-  const { ref, inView } = useInView();
+export const SearchClient = ({ currentUser }: SearchClientProps) => {
+  const navigations: QueryType[] = ["TWEETS", "PEOPLE", "MEDIA"];
+  const [active, setActive] = useState<QueryType>("TWEETS");
 
-  const queryKey = `SEARCHED_${active}`;
-
-  const fetchData = async ({ pageParam = undefined }) => {
-    const url = qs.stringifyUrl({
-      url: "/api/search",
-      query: {
-        q,
-        type: active,
-        cursor: pageParam,
-      },
-    });
-    const res = await fetch(url);
-    return res.json();
-  };
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfiniteQuery({
-      queryKey: [queryKey],
-      queryFn: fetchData,
-      getNextPageParam: (lastPage) => lastPage?.nextCursor,
-      initialPageParam: undefined,
-    });
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, fetchNextPage, inView]);
+  const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
 
   return (
     <div className="flex flex-col">
@@ -60,53 +28,32 @@ export const SearchClient = ({ q, currentUser }: SearchClientProps) => {
         active={active}
         onChange={(value) => setActive(value)}
         border
-        hasSearchInput
         currentUser={currentUser}
         className="pt-1.5"
-      />
-      {status === "pending" ? (
-        active === "TWEETS" ? (
-          <Post.Skeleton count={6} />
-        ) : (
-          "Loading people..."
-        )
-      ) : status === "error" ? (
-        <LoadingError />
+      >
+        <SearchInput
+          value={inputValue}
+          onChange={(value) => setInputValue(value)}
+          onSubmit={() => router.push(`/explore/search/?q=${inputValue}`)}
+          results
+        />
+      </Header>
+      {active === "PEOPLE" ? (
+        <UserList
+          currentUser={currentUser}
+          type={active}
+          hasBio
+          hasFollowButton
+          searchQuery
+        />
       ) : (
-        data?.pages?.map((page, index) => (
-          <Fragment key={index}>
-            {active === "PEOPLE"
-              ? page.items.map((user: FullUserType) => (
-                  <SingleUser
-                    key={user.id}
-                    currentUser={currentUser}
-                    queryKey={queryKey}
-                    user={user}
-                    hasFollowButton
-                  />
-                ))
-              : page.items.map((tweet: FullTweetType) => (
-                  <Post
-                    key={tweet.id}
-                    currentUser={currentUser}
-                    queryKey={queryKey}
-                    tweet={tweet}
-                  />
-                ))}
-          </Fragment>
-        ))
+        <Feed
+          currentUser={currentUser}
+          type={active}
+          media={active === "MEDIA"}
+          searchQuery
+        />
       )}
-      {hasNextPage && (
-        <div>
-          {isFetchingNextPage && (
-            <TweetSkeletons
-              count={7}
-              photo={active === "MEDIA" ? true : false}
-            />
-          )}
-        </div>
-      )}
-      <div ref={ref} />
     </div>
   );
 };

@@ -7,13 +7,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useModal } from "@/hooks/use-modal-store";
-import { useMutationHook } from "@/hooks/use-mutation-hook";
 import { useOrigin } from "@/hooks/use-origin";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
-import {
-  useQueryClient
-} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -54,17 +51,10 @@ const PostMenu: React.FC<PostMenuProps> = ({
       {
         label: "Delete",
         icon: Trash,
-        onClick: () => mutate(),
+        onClick: () => {}
       },
     ];
   }
-
-  const { mutate } = useMutationHook({
-    queryKey,
-    api: `/api/tweets/${tweet.id}`,
-    method: "delete",
-    success: "Tweet was Deleted",
-  });
 
   return (
     <DropdownMenu>

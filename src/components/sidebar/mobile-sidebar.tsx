@@ -49,7 +49,7 @@ export function MobileSidebar({ currentUser }: MobileSidebarProps) {
         >
           <Avatar
             image={currentUser.image}
-            classname="min-h-[24px] min-w-[24px]"
+            classname="min-w-[32px]"
           />
         </SheetTrigger>
         <SheetContent side="left" className="p-0 flex flex-col py-3">

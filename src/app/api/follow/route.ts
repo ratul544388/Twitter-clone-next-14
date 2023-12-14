@@ -11,56 +11,33 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    const alreadyFollowing = await db.follower.findUnique({
+    if (userId === currentUser.id) {
+      return new NextResponse("Users are not allowed to follow them self", {
+        status: 403,
+      });
+    }
+
+    const alreadyFollowing = await db.follow.findFirst({
       where: {
-        userId: userId,
+        followerId: currentUser.id,
+        followingId: userId,
+      },
+    });
+
+    if (alreadyFollowing) {
+      return new NextResponse("You are already following to this user", {
+        status: 403,
+      });
+    }
+
+    const follow = await db.follow.create({
+      data: {
+        followingId: userId,
         followerId: currentUser.id,
       },
     });
 
-    const following = await db.user.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        followings: {
-          ...(alreadyFollowing
-            ? {
-                delete: {
-                  followingId: userId,
-                },
-              }
-            : {
-                create: {
-                  followingId: userId,
-                },
-              }),
-        },
-      },
-    });
-
-    const follower = await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        followers: {
-          ...(alreadyFollowing
-            ? {
-                delete: {
-                  followerId: currentUser.id,
-                },
-              }
-            : {
-                create: {
-                  followerId: currentUser.id,
-                },
-              }),
-        },
-      },
-    });
-
-    return NextResponse.json({ following, follower });
+    return NextResponse.json(follow);
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal server error", { status: 500 });

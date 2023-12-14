@@ -1,5 +1,4 @@
 import Icon from "@/components/icon";
-import { useMutationHook } from "@/hooks/use-mutation-hook";
 import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
@@ -25,12 +24,6 @@ const ReactSection: React.FC<ReactSectionProps> = ({
   className,
 }) => {
   const { onOpen } = useModal();
-  const { mutate } = useMutationHook({
-    method: "post",
-    api: `/api/tweets/${tweet.id}/like`,
-    queryKey,
-    refresh,
-  });
 
   const hasLike = tweet.likes.some((like) => like.id === currentUser?.id);
 
@@ -71,7 +64,6 @@ const ReactSection: React.FC<ReactSectionProps> = ({
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          mutate();
         }}
         className={cn(
           "flex items-center cursor-pointer group hover:text-rose-500",

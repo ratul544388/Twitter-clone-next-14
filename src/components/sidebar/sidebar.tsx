@@ -9,6 +9,7 @@ import { FaFeather } from "react-icons/fa";
 import Icon from "../icon";
 import { Button } from "../ui/button";
 import UserButton from "./user-button";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   className?: string;
@@ -17,7 +18,11 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
   const routes = useRoutes({ currentUser });
+  const pathname = usePathname();
   const { onOpen } = useModal();
+
+  const communityId =
+    pathname.split("/")[1] === "communities" ? pathname.split("/")[2] : null;
 
   return (
     <div className={cn("border-r", className)}>
@@ -44,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
             </Link>
           ))}
           <Button
-            onClick={() => onOpen("tweetModal")}
+            onClick={() => onOpen("tweetModal", { communityId })}
             className="p-0 rounded-full h-[52px] w-[52px] xl:h-auto xl:w-auto py-3 mt-2 hover:bg-sky-500/90 font-semibold"
           >
             <p className="hidden xl:block">Tweet</p>

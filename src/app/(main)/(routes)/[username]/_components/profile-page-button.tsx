@@ -1,5 +1,5 @@
 "use client";
-import FollowButton from "@/components/follow-button";
+import { FollowButton } from "@/components/follow-button";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 import { FullUserType } from "@/types";
@@ -29,7 +29,7 @@ const ProfilePageButton: React.FC<ProfilePageButtonProps> = ({
         <FollowButton
           user={user}
           currentUser={currentUser}
-          queryKey="whoToFollow"
+          queryKey="WHO_TO_FOLLOW"
         />
       )}
     </div>

@@ -22,7 +22,13 @@ interface PostProps {
   className?: string;
 }
 
-export const Post = ({ tweet, currentUser, queryKey, refresh, className }: PostProps) => {
+export const Post = ({
+  tweet,
+  currentUser,
+  queryKey,
+  refresh,
+  className,
+}: PostProps) => {
   const post = tweet.isRetweet && tweet.tweet ? tweet.tweet : tweet;
   const router = useRouter();
 
@@ -31,7 +37,13 @@ export const Post = ({ tweet, currentUser, queryKey, refresh, className }: PostP
       href={`/${post.user.username}/${post.id}`}
       className="flex flex-col relative"
     >
-      <div className={cn("flex flex-col py-2 px-3 pb-1", tweet.isRetweet && "pt-3", className)}>
+      <div
+        className={cn(
+          "flex flex-col py-2 px-3 pb-1",
+          tweet.isRetweet && "pt-3",
+          className
+        )}
+      >
         {tweet.isRetweet && (
           <div className="text-sm flex absolute gap-1 top-0.5 left-[48px] items-center text-muted-foreground">
             <Repeat2 className="h-3 w-3" />@{tweet.user.username} reposted
@@ -93,10 +105,10 @@ export const Post = ({ tweet, currentUser, queryKey, refresh, className }: PostP
 
 Post.Skeleton = function PostSkeleton({
   count,
-  photo,
+  media,
 }: {
   count: number;
-  photo?: boolean;
+  media?: boolean;
 }) {
   const getRandomSize = (min: number, max: number, parcent?: boolean) => {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -124,7 +136,7 @@ Post.Skeleton = function PostSkeleton({
               className="h-6"
               style={{ width: getRandomSize(40, 80, true) }}
             />
-            {(index % 2 !== 0 || photo) && (
+            {(index % 2 !== 0 || media) && (
               <Skeleton
                 className="w-full"
                 style={{ height: getRandomSize(250, 320) }}
