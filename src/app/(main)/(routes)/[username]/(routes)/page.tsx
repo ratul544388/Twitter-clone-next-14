@@ -10,6 +10,7 @@ import { Calendar } from "lucide-react";
 import { redirect } from "next/navigation";
 import Header from "../../../_components/header";
 import ProfileTweets from "../_components/profile-tweets";
+import { EditProfileButton } from "../_components/edit-profile-button";
 
 const UsernamePage = async ({ params }: { params: { username: string } }) => {
   const user = await db.user.findUnique({
@@ -40,7 +41,12 @@ const UsernamePage = async ({ params }: { params: { username: string } }) => {
 
   return (
     <main className="flex flex-col w-full">
-      <Header label={user.username} border showBackButton />
+      <Header border showBackButton>
+        <div className="flex flex-col">
+          <h1 className="font-semibold text-lg">{user.username}</h1>
+          <p className="text-sm">{tweetCount} tweets</p>
+        </div>
+      </Header>
       <CoverPhoto value={user.coverPhoto} />
       <div className="relative">
         <ProfilePhoto
@@ -50,7 +56,7 @@ const UsernamePage = async ({ params }: { params: { username: string } }) => {
       </div>
       <div className="p-3 ml-auto">
         {user.id === currentUser.id ? (
-          <Button>Edit profile</Button>
+          <EditProfileButton currentUser={currentUser} user={user} />
         ) : (
           <FollowButton
             user={user}

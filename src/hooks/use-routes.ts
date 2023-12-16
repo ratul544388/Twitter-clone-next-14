@@ -29,7 +29,7 @@ export const useRoutes = ({
   const pathname = usePathname();
   let routes = [
     {
-      label: "home",
+      label: "Home",
       icon: pathname === "/" ? BiSolidHomeCircle : BiHomeCircle,
       href: "/",
       active: pathname === "/",
@@ -41,13 +41,13 @@ export const useRoutes = ({
       active: ["/explore", "/explore/search"].includes(pathname),
     },
     {
-      label: "notifications",
+      label: "Notifications",
       icon: pathname.includes("notifications") ? HiBell : HiOutlineBell,
       href: "/notifications",
       active: pathname === "/notifications",
     },
     {
-      label: "messages",
+      label: "Messages",
       icon: pathname.includes("messages") ? BiSolidEnvelope : BiEnvelope,
       href: "/messages",
       active: pathname === "/messages",
@@ -67,7 +67,7 @@ export const useRoutes = ({
       active: pathname === "/blue-badge",
     },
     {
-      label: "profile",
+      label: "Profile",
       icon: pathname.includes(`/${currentUser?.username}`)
         ? HiUser
         : HiOutlineUser,
@@ -79,7 +79,7 @@ export const useRoutes = ({
   if (isMobileSidebar) {
     routes = [
       {
-        label: "profile",
+        label: "Profile",
         icon: pathname.includes(`/${currentUser?.username}`)
           ? HiUser
           : HiOutlineUser,
@@ -87,7 +87,7 @@ export const useRoutes = ({
         active: pathname === `/${currentUser?.username}`,
       },
       {
-        label: "notifications",
+        label: "Notifications",
         icon: pathname.includes("notifications") ? HiBell : HiOutlineBell,
         href: "/notifications",
         active: pathname === "/notifications",
@@ -106,7 +106,7 @@ export const useRoutes = ({
   if (isBottomNavbar) {
     routes = [
       {
-        label: "home",
+        label: "Home",
         icon: pathname === "/" ? BiSolidHomeCircle : BiHomeCircle,
         href: "/",
         active: pathname === "/",
@@ -124,7 +124,7 @@ export const useRoutes = ({
         active: ["/communities"].includes(pathname),
       },
       {
-        label: "messages",
+        label: "Messages",
         icon: pathname.includes("messages") ? BiSolidEnvelope : BiEnvelope,
         href: "/messages",
         active: pathname === "/messages",

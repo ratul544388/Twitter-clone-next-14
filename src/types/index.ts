@@ -3,10 +3,16 @@ import { Community, Follow, Member, Tweet, User } from "@prisma/client";
 export type FullTweetType = Tweet & {
   retweets: Tweet[];
   likes: User[];
-  user: User;
+  user: User & {
+    followers: Follow[];
+    // followings: Follow[]
+  };
   tweet?:
     | (Tweet & {
-        user: User;
+        user: User & {
+          followers: Follow[];
+          // followings: Follow[]
+        };
         likes: User[];
         retweets: Tweet[];
       })

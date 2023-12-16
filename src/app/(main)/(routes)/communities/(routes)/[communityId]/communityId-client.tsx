@@ -122,7 +122,6 @@ export const CommunityIdClient = ({
       {active === "TWEETS" ? (
         <Feed
           type="TWEETS"
-          queryKey="COMMUNITY_TWEETS"
           currentUser={currentUser}
           community={community}
         />

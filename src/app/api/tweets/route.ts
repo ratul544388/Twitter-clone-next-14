@@ -43,7 +43,7 @@ export async function GET(req: Request) {
     const communityId = searchParams.get("communityId");
     const q = searchParams.get("q");
 
-    const TWEETS_BATCH = 10;
+    const TWEETS_BATCH = 8;
 
     const tweets = await db.tweet.findMany({
       where: {
@@ -180,10 +180,18 @@ export async function GET(req: Request) {
       include: {
         retweets: true,
         likes: true,
-        user: true,
+        user: {
+          include: {
+            followers: true,
+          },
+        },
         tweet: {
           include: {
-            user: true,
+            user: {
+              include: {
+                followers: true,
+              },
+            },
             likes: true,
             retweets: true,
           },

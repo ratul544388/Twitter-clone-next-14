@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Icon from "../icon";
 import { CoverPhoto } from "../media/cover-photo";
-import Textarea from "../textarea";
+import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect } from "react";
@@ -100,7 +100,7 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
       <div
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "w-[500px] shadow-lg overflow-hidden rounded-xl bg-background border absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all opacity-20",
+          "max-w-[500px] w-full shadow-lg overflow-hidden rounded-xl bg-background border absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all opacity-20",
           open && "opacity-100"
         )}
       >
@@ -177,10 +177,11 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
                   <FormItem className="w-full">
                     <FormControl>
                       <Textarea
-                        value={field.value as string}
+                        value={field.value}
                         onChange={field.onChange}
                         label="Bio"
                         limit={300}
+                        rows={3}
                       />
                     </FormControl>
                     <FormMessage />

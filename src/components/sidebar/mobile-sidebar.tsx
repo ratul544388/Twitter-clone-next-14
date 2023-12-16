@@ -1,33 +1,15 @@
 "use client";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useRoutes } from "@/hooks/use-routes";
 import { FullUserType } from "@/types";
-import { Avatar } from "../avatar";
-import FollowersInfo from "../followers-info";
-import {
-  BiEnvelope,
-  BiHomeCircle,
-  BiSolidEnvelope,
-  BiSolidHomeCircle,
-} from "react-icons/bi";
-import { BsPeople, BsPeopleFill } from "react-icons/bs";
-import { FaFeather } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
-import {
-  HiBadgeCheck,
-  HiBell,
-  HiOutlineBadgeCheck,
-  HiOutlineBell,
-  HiOutlineUser,
-  HiUser,
-} from "react-icons/hi";
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Separator } from "../ui/separator";
 import { SignOutButton } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
-import { useState } from "react";
-import { useRoutes } from "@/hooks/use-routes";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Avatar } from "../avatar";
+import FollowersInfo from "../followers-info";
+import { Separator } from "../ui/separator";
 
 interface MobileSidebarProps {
   currentUser: FullUserType;
@@ -36,8 +18,13 @@ interface MobileSidebarProps {
 export function MobileSidebar({ currentUser }: MobileSidebarProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const routes = useRoutes({ currentUser, isMobileSidebar: true });
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <div className="xs:hidden">
@@ -47,10 +34,7 @@ export function MobileSidebar({ currentUser }: MobileSidebarProps) {
           asChild
           className="h-fit w-fit"
         >
-          <Avatar
-            image={currentUser.image}
-            classname="min-w-[32px]"
-          />
+          <Avatar image={currentUser.image} size={28} />
         </SheetTrigger>
         <SheetContent side="left" className="p-0 flex flex-col py-3">
           <div className="flex items-center gap-3 pl-10">
@@ -69,7 +53,6 @@ export function MobileSidebar({ currentUser }: MobileSidebarProps) {
               <div
                 key={route.label}
                 onClick={() => {
-                  setOpen(false);
                   router.push(route.href);
                 }}
                 className="flex items-center hover:bg-sky-500/5 cursor-pointer pl-10 gap-4 py-3 font-medium"

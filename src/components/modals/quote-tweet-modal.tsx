@@ -17,7 +17,7 @@ import { Avatar } from "../avatar";
 import { EmojiPicker } from "../emoji-picker";
 import Icon from "../icon";
 import { MediaUpload } from "../media/media-upload";
-import Textarea from "../textarea";
+import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
 import {
@@ -60,15 +60,9 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (tweet) {
-        await axios.patch(`/api/tweets/${tweet.id}/quote`, {
-          ...values,
-        });
-      } else {
-        await axios.post(`/api/tweets/quote`, {
-          ...values,
-        });
-      }
+      await axios.post(`/api/tweets/${tweet?.id}/quote`, {
+        ...values,
+      });
       toast.success(tweet ? "Tweet updated" : "Tweet posted");
       queryClient.invalidateQueries(["FOR YOU"] as InvalidateQueryFilters);
       form.reset();
@@ -104,7 +98,7 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-start px-6 gap-3 overflow-y-auto"
+            className="flex items-start px-6 overflow-y-auto"
             style={{ maxHeight: "calc(100vh - 180px" }}
           >
             <Avatar image={currentUser?.image} />
@@ -117,17 +111,15 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
                     <Textarea
                       placeholder="Add a comment"
                       value={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                        form.setValue("caption", value, {
+                      onChange={(e) => {
+                        form.setValue("caption", e.target.value, {
                           shouldValidate: true,
                         });
                       }}
                       disabled={isLoading}
-                      autoFocus
+                      rows={1}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />

@@ -8,8 +8,6 @@ interface AvatarProps {
   classname?: string;
   image?: string | null;
   onClick?: () => void;
-  imageUpload?: (value: string) => void;
-  disabled?: boolean;
   size?: number;
 }
 
@@ -17,9 +15,7 @@ export const Avatar = ({
   image,
   classname,
   onClick,
-  imageUpload,
-  disabled,
-  size = 40,
+  size = 38,
 }: AvatarProps) => {
   return (
     <div
@@ -36,13 +32,6 @@ export const Avatar = ({
         fill
         className="object-cover"
       />
-      {imageUpload && (
-        <MediaUpload
-          onChange={(value) => value && imageUpload?.(value as string)}
-          endPoint="singlePhoto"
-          disabled={disabled}
-        />
-      )}
     </div>
   );
 };

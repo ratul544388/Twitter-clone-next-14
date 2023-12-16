@@ -9,9 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import { FullCommunityType, FullTweetType, QueryType } from "@/types";
 import { User } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
+import { EmptyState } from "@/components/empty-state";
 
 interface FeedProps {
-  queryKey?: string;
   currentUser: User;
   type: QueryType;
   community?: FullCommunityType;
@@ -22,7 +22,6 @@ interface FeedProps {
 }
 
 export const Feed = ({
-  queryKey,
   currentUser,
   type,
   community,
@@ -62,9 +61,8 @@ export const Feed = ({
     isFetchingNextPage,
     status,
     refetch,
-    isRefetching,
   } = useInfiniteQuery({
-    queryKey: [queryKey || type],
+    queryKey: [type],
     queryFn: fetchTweets,
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
     initialPageParam: undefined,
@@ -90,6 +88,10 @@ export const Feed = ({
     return <LoadingError />;
   }
 
+  if (!data.pages[0].items.length) {
+    return <EmptyState title="No tweet found" />;
+  }
+
   return (
     <div>
       {data?.pages?.map((page, i) => (
@@ -100,9 +102,8 @@ export const Feed = ({
                 key={tweet.id}
                 tweet={tweet}
                 currentUser={currentUser}
-                queryKey={queryKey || type}
+                queryKey={type}
               />
-              <Separator />
             </Fragment>
           ))}
         </Fragment>

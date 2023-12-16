@@ -22,7 +22,6 @@ export const SearchClient = ({ currentUser }: SearchClientProps) => {
   return (
     <div className="flex flex-col">
       <Header
-        label="Explore"
         navigations={navigations}
         showBackButton
         active={active}

@@ -1,14 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Tweet, User } from "@prisma/client";
+import { FullTweetType } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
 interface MediaPreviewProps {
-  tweet: Tweet & {
-    user: User;
-  };
+  tweet: FullTweetType
 }
 
 export const MediaPreview = ({ tweet }: MediaPreviewProps) => {

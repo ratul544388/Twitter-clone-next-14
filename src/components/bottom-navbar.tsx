@@ -16,6 +16,9 @@ export const BottomNavbar = () => {
   const routes = useRoutes({ isBottomNavbar: true });
   const { onOpen } = useModal();
 
+  const communityId =
+    pathname.split("/")[1] === "communities" ? pathname.split("/")[2] : null;
+
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.scrollY;
     setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 60);
@@ -36,14 +39,14 @@ export const BottomNavbar = () => {
       {routes.map((route) => (
         <Link href={route.href} key={route.href}>
           <div className="py-3 px-4 hover:bg-sky-500/5 rounded-3xl">
-            <route.icon size={22} />
+            <route.icon size={28} />
           </div>
         </Link>
       ))}
       <Icon
         icon={Plus}
         iconSize={34}
-        onClick={() => onOpen("tweetModal")}
+        onClick={() => onOpen("tweetModal", { communityId })}
         className={cn(
           "fixed bottom-[80px] right-6 bg-primary text-white hover:bg-sky-500/80 p-3 opacity-0 pointer-events-none scale-0 transition-all duration-300",
           visible && "opacity-100 pointer-events-auto scale-100"

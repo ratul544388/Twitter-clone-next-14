@@ -67,7 +67,7 @@ const ProfileTweets: React.FC<ProfileTweetsProps> = ({ currentUser, user }) => {
       ) : (
         data?.pages?.map((page, index) => (
           <Fragment key={index}>
-            {page.items.map((tweet: FullTweetType) => (
+            {page?.items?.map((tweet: FullTweetType) => (
               <Post
                 key={tweet.id}
                 currentUser={currentUser}

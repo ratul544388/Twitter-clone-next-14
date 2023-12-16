@@ -17,7 +17,7 @@ import { Avatar } from "../avatar";
 import { EmojiPicker } from "../emoji-picker";
 import Icon from "../icon";
 import { MediaUpload } from "../media/media-upload";
-import Textarea from "../textarea";
+import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
 import {
@@ -48,7 +48,6 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
   });
   const caption = form.getValues("caption");
   const media = form.getValues("media");
-  const [mediaPreview, setMediaPreview] = useState(media);
   const queryClient = useQueryClient();
   const tweet = data.tweet;
 
@@ -100,45 +99,51 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-start px-6 gap-3 overflow-y-auto"
+            className="space-y-2 px-6 overflow-y-auto"
             style={{ maxHeight: "calc(100vh - 180px" }}
           >
-            <Avatar image={currentUser?.image} />
-            <FormField
-              control={form.control}
-              name="caption"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Textarea
-                      placeholder="What's happening?!"
-                      value={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                        form.setValue("caption", value, {
-                          shouldValidate: true,
-                        });
-                      }}
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <div className="flex items-start pb-2">
+              <Avatar image={currentUser?.image} />
+              <FormField
+                control={form.control}
+                name="caption"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Textarea
+                        placeholder="What's happening?!"
+                        value={field.value}
+                        onChange={(e) => {
+                          form.setValue("caption", e.target.value, {
+                            shouldValidate: true,
+                          });
+                        }}
+                        rows={1}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <UploadPreview
+              value={media}
+              onChange={(value) =>
+                form.setValue("media", value, {
+                  shouldValidate: true,
+                })
+              }
+              className="pb-2"
             />
           </form>
         </Form>
-        <UploadPreview
-          value={mediaPreview}
-          onChange={(value) => setMediaPreview(value)}
-        />
         <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
           <div className="flex">
             <MediaUpload
               endPoint="multiMedia"
               onChange={(value) => {
-                form.setValue("media", [...media, ...(value as string[])]);
-                setMediaPreview([...media, ...(value as string[])]);
+                form.setValue("media", [...media, ...(value as string[])], {
+                  shouldValidate: true,
+                });
               }}
               disabled={isLoading}
             />

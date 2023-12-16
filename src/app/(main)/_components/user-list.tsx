@@ -1,5 +1,6 @@
 "use client";
 
+import { EmptyState } from "@/components/empty-state";
 import { LoadingError } from "@/components/loading-error";
 import { SingleUser } from "@/components/single-user";
 import { FullCommunityType, FullUserType, QueryType } from "@/types";
@@ -104,6 +105,11 @@ export const UserList = ({
   if (status === "error") {
     return <LoadingError />;
   }
+
+  if (!data.pages[0].items.length) {
+    return <EmptyState title="No people found" />;
+  }
+
   return (
     <>
       {data?.pages?.map((page, index) => (

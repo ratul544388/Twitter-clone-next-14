@@ -17,16 +17,10 @@ import { Avatar } from "../avatar";
 import { EmojiPicker } from "../emoji-picker";
 import Icon from "../icon";
 import { MediaUpload } from "../media/media-upload";
-import Textarea from "../textarea";
+import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { UploadPreview } from "../upload-preview";
 
 const formSchema = z.object({
@@ -47,7 +41,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
   const media = form.getValues("media");
   const queryClient = useQueryClient();
   const open = isOpen && type === "tweetModal";
-  const tweet = data.tweet;
+  const { tweet, communityId } = data;
 
   const handleClose = () => {
     onClose();
@@ -61,19 +55,19 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
     }
   }, [data, form, tweet]);
 
-const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (tweet) {
         await axios.patch(`/api/tweets/${tweet.id}`, {
           ...values,
-          communityId: data.communityId,
+          communityId,
         });
       } else {
         await axios.post("/api/tweets", {
           ...values,
-          communityId: data.communityId,
+          communityId,
         });
       }
       toast.success(tweet ? "Tweet updated" : "Tweet posted");
@@ -108,46 +102,46 @@ const isLoading = form.formState.isSubmitting;
             className="absolute left-1 top-1/2 -translate-y-1/2"
           />
           <h1 className="font-semibold text-muted-foreground">
-            {data.communityId && "Community post"}
+            {communityId && "Community post"}
           </h1>
         </div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-start px-6 gap-3 overflow-y-auto"
+            className="px-6 space-y-2 overflow-y-auto pb-3"
             style={{ maxHeight: "calc(100vh - 180px" }}
           >
-            <Avatar image={currentUser?.image} />
-            <FormField
-              control={form.control}
-              name="caption"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Textarea
-                      placeholder="What's happening?!"
-                      value={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                        form.setValue("caption", value, {
-                          shouldValidate: true,
-                        });
-                      }}
-                      autoFocus
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
+            <div className="flex items-start">
+              <Avatar image={currentUser?.image} />
+              <FormField
+                control={form.control}
+                name="caption"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Textarea
+                        placeholder="What's happening?!"
+                        value={field.value}
+                        onChange={(e) => {
+                          form.setValue("caption", e.target.value, {
+                            shouldValidate: true,
+                          });
+                        }}
+                        rows={1}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <UploadPreview
+              value={media}
+              onChange={(value) =>
+                form.setValue("media", value, { shouldValidate: true })
+              }
             />
           </form>
         </Form>
-        <UploadPreview
-          value={media}
-          onChange={(value) =>
-            form.setValue("media", value, { shouldValidate: true })
-          }
-          className="pr-6 pl-[76px]"
-        />
         <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
           <div className="flex">
             <MediaUpload

@@ -5,7 +5,6 @@ import * as z from "zod";
 import { Avatar } from "@/components/avatar";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { MediaUpload } from "@/components/media/media-upload";
-import Textarea from "@/components/textarea";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { UploadPreview } from "@/components/upload-preview";
@@ -18,6 +17,8 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   caption: z.string().min(1).max(1000),
@@ -42,6 +43,7 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ currentUser, tweet }) => {
   const router = useRouter();
   const [previewMedia, setPreviewMedia] = useState(media);
   const queryClient = useQueryClient();
+  const [isReplying, setIsReplying] = useState(false);
 
   const isLoading = form.formState.isSubmitting;
 
@@ -62,15 +64,23 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ currentUser, tweet }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex relative flex-col pb-1 gap-1 pt-3 border-b-[1.5px]"
+        className="flex relative flex-col gap-1 p-3 pt-2 pb-2 border-b-[1.5px]"
       >
-        <div className="text-muted-foreground z-10 absolute top-0.5 text-sm ml-[53px]">
-          Replying to <span className="text-primary">@ratul544</span>
-        </div>
-        <div className="flex items-start gap-3 mt-1.5">
+        {isReplying && (
+          <div className="text-muted-foreground z-20 text-sm absolute pl-[50px] top-1">
+            Repying to <span className="text-primary">@ratul544</span>
+          </div>
+        )}
+        <div
+          className={cn(
+            "flex relative items-start",
+            isReplying && "pb-12 pt-2.5"
+          )}
+        >
           <Avatar
             onClick={() => router.push(`/${currentUser.username}`)}
             image={currentUser.image}
+            size={38}
           />
           <FormField
             control={form.control}
@@ -79,15 +89,12 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ currentUser, tweet }) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Textarea
-                    className="min-h-[20px] pt-1.5"
                     placeholder="What's happening?!"
                     value={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      form.setValue("caption", value, {
-                        shouldValidate: true,
-                      });
-                    }}
+                    onChange={field.onChange}
+                    onFocus={() => setIsReplying(true)}
+                    rows={1}
+                    disabled={isLoading}
                   />
                 </FormControl>
               </FormItem>
@@ -98,26 +105,37 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ currentUser, tweet }) => {
           value={previewMedia}
           onChange={(value) => setPreviewMedia(value)}
         />
-        <div className="flex relative items-center pl-[42px]">
-          <MediaUpload
-            endPoint="multiMedia"
-            onChange={(value) => {
-              form.setValue("media", [...media, ...(value as string[])]);
-              setPreviewMedia([...media, ...(value as string[])]);
-            }}
-            disabled={isLoading}
-          />
-          <EmojiPicker
-            onChange={(emoji) => form.setValue("caption", caption + emoji)}
-            disabled={isLoading}
-          />
+        <div
+          className={cn(
+            "flex absolute pointer-events-none bottom-[9px] left-[54px] right-3 items-center transition-all",
+            isReplying && "pointer-events-auto"
+          )}
+        >
+          {isReplying && (
+            <>
+              <MediaUpload
+                endPoint="multiMedia"
+                onChange={(value) => {
+                  form.setValue("media", [...media, ...(value as string[])]);
+                  setPreviewMedia([...media, ...(value as string[])]);
+                }}
+                disabled={isLoading}
+              />
+              <EmojiPicker
+                onChange={(emoji) => form.setValue("caption", caption + emoji)}
+                disabled={isLoading}
+              />
+            </>
+          )}
           <div className="flex items-center gap-3 ml-auto">
-            <CircularProgressbar
-              maxValue={300}
-              value={caption.length}
-              className="h-6 w-6"
-              strokeWidth={15}
-            />
+            {isReplying && (
+              <CircularProgressbar
+                maxValue={300}
+                value={caption.length}
+                className="h-6 w-6"
+                strokeWidth={15}
+              />
+            )}
             <Button disabled={isLoading || !caption.trim()} className="ml-auto">
               Reply
             </Button>

@@ -12,6 +12,14 @@ import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { PencilLine, Repeat2 } from "lucide-react";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface RetweetButtonProps {
   currentUser: User | null;
@@ -29,14 +37,25 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
   hideNumber,
 }) => {
   const { onOpen } = useModal();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-  // const { mutate } = useMutationHook({
-  //   api: `/api/tweets/${tweet.id}/retweet`,
-  //   method: "post",
-  //   queryKey,
-  //   success: "success",
-  //   refresh,
-  // });
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      await axios.post(`/api/tweets/${tweet.id}/retweet`);
+    },
+    onSuccess: () => {
+      toast.success("Success");
+      if (queryKey) {
+        queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
+      } else {
+        router.refresh();
+      }
+    },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
+  });
 
   const isRetweet = tweet.retweets.some(
     (tweet) => tweet.isRetweet && tweet.userId === currentUser?.id
@@ -47,7 +66,6 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        onClick={(e) => e.stopPropagation()}
         className={cn(
           "flex items-center cursor-pointer group hover:text-green-500 outline-none select-none",
           isRetweet && "text-green-500"
@@ -60,8 +78,10 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
         />
         {!hideNumber && retweetCount}
       </DropdownMenuTrigger>
-      <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+      <DropdownMenuContent>
         <DropdownMenuItem
+          disabled={isPending}
+          onClick={() => mutate()}
           className={cn(isRetweet && "text-red-500")}
         >
           <Repeat2 className="h-4 w-4 mr-2" />

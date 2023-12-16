@@ -18,7 +18,6 @@ export const ExploreClient = ({ q, currentUser }: SearchClientProps) => {
   return (
     <div className="flex flex-col">
       <Header
-        label="Explore"
         showBackButton
         border
         currentUser={currentUser}

@@ -42,8 +42,11 @@ CommunityCard.Row = function CommunityCardRow({
   community: FullCommunityType;
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="w-[110px] relative aspect-[6/5] rounded-lg overflow-hidden bg-accent/50 hover:bg-accent">
+    <Link
+      href={`/communities/${community.id}`}
+      className="flex flex-col gap-2 border w-[110px] pb-2 rounded-xl overflow-hidden bg-accent/50 hover:bg-accent transition-all duration-300 hover:scale-[1.01]"
+    >
+      <div className="w-full relative aspect-[6/5]">
         <Image
           src={community.coverPhoto}
           alt="cover photo"
@@ -55,7 +58,7 @@ CommunityCard.Row = function CommunityCardRow({
         <h1 className="text-sm font-semibold line-clamp-1">{community.name}</h1>
         <CircularPhotos community={community} />
       </div>
-    </div>
+    </Link>
   );
 };
 

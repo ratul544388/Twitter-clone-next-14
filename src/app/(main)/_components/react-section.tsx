@@ -10,7 +10,6 @@ interface ReactSectionProps {
   currentUser: User;
   tweet: FullTweetType;
   queryKey?: string;
-  refresh?: boolean;
   className?: string;
 }
 
@@ -18,10 +17,8 @@ const ReactSection: React.FC<ReactSectionProps> = ({
   currentUser,
   tweet,
   queryKey,
-  refresh,
   className,
 }) => {
-
   return (
     <div
       onClick={(e) => e.stopPropagation()}
@@ -30,15 +27,20 @@ const ReactSection: React.FC<ReactSectionProps> = ({
         className
       )}
     >
-      <ReplyButton tweet={tweet} queryKey={queryKey} refresh/>
+      <ReplyButton tweet={tweet} queryKey={queryKey} />
       <RetweetButton
         tweet={tweet}
         currentUser={currentUser}
         queryKey={queryKey}
         iconSize={20}
       />
-      <HeartButton tweet={tweet} currentUser={currentUser} size={20} />
-      <ShareButton />
+      <HeartButton
+        tweet={tweet}
+        currentUser={currentUser}
+        size={20}
+        queryKey={queryKey}
+      />
+      <ShareButton user={tweet.user} />
     </div>
   );
 };

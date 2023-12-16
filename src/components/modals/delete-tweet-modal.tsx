@@ -33,8 +33,8 @@ export function DeleteTweetModal() {
       if (queryKey) {
         queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
       } else {
+        router.back();
         router.refresh();
-        router.push("/");
       }
       onClose();
     },

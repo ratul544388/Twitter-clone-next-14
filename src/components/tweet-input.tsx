@@ -14,9 +14,10 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { EmojiPicker } from "./emoji-picker";
 import { MediaUpload } from "./media/media-upload";
-import Textarea from "./textarea";
+import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { UploadPreview } from "./upload-preview";
+import { Separator } from "./ui/separator";
 
 const formSchema = z.object({
   caption: z.string().min(1).max(1000),
@@ -63,9 +64,9 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex relative flex-col p-3 pb-1 border-b-[1.5px]"
+        className="flex relative flex-col gap-2 p-3 pb-1"
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-start">
           <Avatar
             onClick={() => router.push(`/${currentUser.username}`)}
             image={currentUser.image}
@@ -77,15 +78,15 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
               <FormItem className="w-full">
                 <FormControl>
                   <Textarea
-                    className="pt-[7px] text-base border-b-[1.5px] rounded-none"
-                    placeholder="What's happening?!"
+                    className="text-base border-b-[1.5px] rounded-none"
+                    placeholder="What is happening?!"
                     value={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      form.setValue("caption", value, {
+                    onChange={(e) => {
+                      form.setValue("caption", e.target.value, {
                         shouldValidate: true,
                       });
                     }}
+                    rows={1}
                   />
                 </FormControl>
               </FormItem>
@@ -100,6 +101,7 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
             })
           }
         />
+        <Separator style={{ width: "calc(100% - 52px)", marginLeft: "auto" }} />
         <div className="flex relative items-center pl-[42px]">
           <MediaUpload
             endPoint="multiMedia"
@@ -116,7 +118,7 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
           />
           <div className="flex items-center gap-3 ml-auto">
             <CircularProgressbar
-              maxValue={300}
+              maxValue={1000}
               value={form.getValues("caption").length}
               className="h-6 w-6"
               strokeWidth={15}

@@ -53,12 +53,6 @@ export const SearchInput = ({
     }
   }, [debouncedValue, results, fetchUsers]);
 
-  useEffect(() => {
-    if (value) {
-      setOpenCard(true);
-    }
-  }, [value, openCard]);
-
   const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (onSubmit) {
@@ -81,7 +75,10 @@ export const SearchInput = ({
         <SearchIcon className="h-5 w-5 absolute top-1/2 -translate-y-1/2 text-muted-foreground right-2 peer-focus:text-primary" />
       </div>
       {openCard && results && value && (
-        <div className="absolute z-20 w-full py-3 mt-1 rounded-xl bg-background shadow-lg">
+        <div
+          ref={containerRef}
+          className="absolute z-20 w-full py-3 mt-1 rounded-xl bg-background shadow-lg"
+        >
           <div
             onClick={() => {}}
             className="p-2 pl-4 cursor-pointer hover:underline text-muted-foreground"

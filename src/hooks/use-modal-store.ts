@@ -37,16 +37,6 @@ interface ModalStore {
   onClose: () => void;
 }
 
-// const onClose = (set: any) => {
-//   set({ type: null, isOpen: false });
-//   const body = document.body.style;
-//   setTimeout(() => {
-//     if (body.pointerEvents === "none") {
-//       body.pointerEvents = "auto";
-//     }
-//   }, 400);
-// };
-
 export const useModal = create<ModalStore>((set) => ({
   type: null,
   data: {},

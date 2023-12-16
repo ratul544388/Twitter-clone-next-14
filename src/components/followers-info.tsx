@@ -11,7 +11,7 @@ const FollowersInfo: React.FC<FollowersInfoProps> = ({ user }) => {
   return (
     <div className="flex items-center gap-4">
       <Link
-        href={`/${user.username}/followers`}
+        href={`/${user.username}/followings`}
         className="flex items-center hover:underline gap-1 font-bold"
       >
         {user.followings.length}
@@ -20,7 +20,7 @@ const FollowersInfo: React.FC<FollowersInfoProps> = ({ user }) => {
         </p>
       </Link>
       <Link
-        href={`/${user.username}/followings`}
+        href={`/${user.username}/followers`}
         className="flex items-center gap-1 hover:underline font-bold"
       >
         {user.followers.length}

@@ -6,16 +6,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useFollowing } from "@/hooks/use-following";
 import { useModal } from "@/hooks/use-modal-store";
-import { useOrigin } from "@/hooks/use-origin";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
-import { useQueryClient } from "@tanstack/react-query";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-import toast from "react-hot-toast";
+import { Edit, MoreHorizontal, Trash, UserCheck2, UserX2 } from "lucide-react";
 
 interface PostMenuProps {
-  currentUser: User | null;
+  currentUser: User;
   tweet: FullTweetType;
   queryKey?: string;
 }
@@ -26,34 +24,12 @@ const PostMenu: React.FC<PostMenuProps> = ({
   currentUser,
 }) => {
   const { onOpen } = useModal();
-  const origin = useOrigin();
-  let menu = [
-    {
-      label: "Copy tweet link",
-      icon: Copy,
-      onClick: () => {
-        navigator.clipboard.writeText(
-          origin + `/${tweet.user.username}/${tweet.id}`
-        );
-        toast.success("Tweet link compied to clipboard");
-      },
-    },
-  ];
-  if (currentUser?.id === tweet.user.id) {
-    menu = [
-      ...menu,
-      {
-        label: "Edit",
-        icon: Edit,
-        onClick: () => onOpen("tweetModal", { tweet, queryKey }),
-      },
-      {
-        label: "Delete",
-        icon: Trash,
-        onClick: () => onOpen("deleteTweetModal", { tweet, queryKey }),
-      },
-    ];
-  }
+
+  const { isFollowing, mutate, isPending } = useFollowing({
+    user: tweet.user,
+    currentUser,
+    queryKey,
+  });
 
   return (
     <DropdownMenu>
@@ -68,12 +44,36 @@ const PostMenu: React.FC<PostMenuProps> = ({
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent onClick={(e) => e.stopPropagation()} align="end">
-        {menu.map((item) => (
-          <DropdownMenuItem key={item.label} onClick={item.onClick}>
-            <item.icon className="h-4 w-4 mr-2" />
-            {item.label}
-          </DropdownMenuItem>
-        ))}
+        {currentUser.id === tweet.user.id ? (
+          <>
+            <DropdownMenuItem
+              onClick={() => onOpen("tweetModal", { tweet, queryKey })}
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-red-500 focus:text-red-500"
+              onClick={() => onOpen("tweetModal", { tweet, queryKey })}
+            >
+              <Trash className="h-4 w-4 mr-2" />
+              Delete
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem onClick={() => mutate()} disabled={isPending}>
+              {isFollowing ? (
+                <UserX2 className="h-4 w-4 mr-2" />
+              ) : (
+                <UserCheck2 className="h-4 w-4 mr-2" />
+              )}
+              {isFollowing
+                ? `Unfollow @${tweet.user.username}`
+                : `Follow @${tweet.user.username}`}
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

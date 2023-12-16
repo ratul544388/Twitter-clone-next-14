@@ -47,15 +47,9 @@ export const HeartButton = ({
     },
   });
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    mutate();
-  };
-
   return (
     <div
-      onClick={handleClick}
+      onClick={() => mutate()}
       className={cn(
         "flex items-center cursor-pointer group hover:text-rose-500",
         hasLike && "text-rose-500"
