@@ -6,7 +6,6 @@ import { EditProfileModal } from "@/components/modals/edit-profile-modal";
 import { KickCommunityModal } from "@/components/modals/kick-community-modal";
 import { LeaveCommunityModal } from "@/components/modals/leave-community-modal";
 import { MakingCommunityAdminModal } from "@/components/modals/making-community-admin-modal";
-import { MediaViewerModal } from "@/components/modals/media-viewer-modal";
 import { QuoteTweetModal } from "@/components/modals/quote-tweet-modal";
 import { ReplyModal } from "@/components/modals/reply-modal";
 import { TweetModal } from "@/components/modals/tweet-modal";

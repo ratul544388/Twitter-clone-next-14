@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({
       )}
     >
       <div
-        className={cn("flex items-center p-2 gap-4", !showBackButton && "pl-4")}
+        className={cn("flex items-center p-2 gap-2", !showBackButton && "pl-4")}
       >
         {mobileSidebar && currentUser && (
           <MobileSidebar currentUser={currentUser} />

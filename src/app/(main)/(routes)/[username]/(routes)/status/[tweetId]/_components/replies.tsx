@@ -57,7 +57,6 @@ const Replies: React.FC<RepliesProps> = ({ tweet, currentUser }) => {
 
   return (
     <>
-      <h1 className="font-semibold pl-3 text-primary">Replies</h1>
       {data?.pages?.map((page, i) => (
         <Fragment key={i}>
           {page.items.map((tweet: FullTweetType) => (

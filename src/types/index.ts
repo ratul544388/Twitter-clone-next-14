@@ -5,13 +5,12 @@ export type FullTweetType = Tweet & {
   likes: User[];
   user: User & {
     followers: Follow[];
-    // followings: Follow[]
   };
+  community?: Community | null;
   tweet?:
     | (Tweet & {
         user: User & {
           followers: Follow[];
-          // followings: Follow[]
         };
         likes: User[];
         retweets: Tweet[];

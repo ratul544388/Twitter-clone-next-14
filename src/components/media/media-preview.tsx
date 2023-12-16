@@ -16,6 +16,7 @@ export const MediaPreview = ({ tweet }: MediaPreviewProps) => {
   if (length === 0) return null;
   return (
     <div
+      onClick={(e) => e.stopPropagation()}
       className={cn(
         "grid w-full aspect-square max-h-[320px] relative rounded-xl overflow-hidden",
         length > 1 && "border-[1.5px]",

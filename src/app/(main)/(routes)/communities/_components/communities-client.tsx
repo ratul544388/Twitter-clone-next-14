@@ -54,11 +54,11 @@ export const CommunitiesClient = ({
           </div>
         </EmptyState>
       ) : (
-        <>
+        <div>
           <CommunityList variant="ROW" />
-          <Separator />
+          <Separator className="mt-3" />
           <Feed currentUser={currentUser} type="COMMUNITIES_TWEETS" />
-        </>
+        </div>
       )}
     </div>
   );

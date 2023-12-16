@@ -185,6 +185,7 @@ export async function GET(req: Request) {
             followers: true,
           },
         },
+        community: true,
         tweet: {
           include: {
             user: {

@@ -8,9 +8,12 @@ export async function POST(
 ) {
   try {
     const currentUser = await getCurrentUser();
+
     if (!currentUser) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
+
+    const { communityId, isReply } = await req.json();
 
     const isAlreadyRetweet = await db.tweet.findFirst({
       where: {
@@ -48,6 +51,8 @@ export async function POST(
                   caption: "",
                   userId: currentUser.id,
                   isRetweet: true,
+                  ...(communityId ? { communityId, isCommunity: true } : {}),
+                  isReply,
                 },
               }),
         },

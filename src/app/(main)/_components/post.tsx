@@ -8,7 +8,7 @@ import ViewOnlyPost from "@/components/view-only-post";
 import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
-import { Repeat2 } from "lucide-react";
+import { Repeat2, Users2 } from "lucide-react";
 import Link from "next/link";
 import PostMenu from "./post-menu";
 import ReactSection from "./react-section";
@@ -28,7 +28,6 @@ export const Post = ({
   queryKey,
   className,
 }: PostProps) => {
-
   const router = useRouter();
   const post = tweet.isRetweet && tweet.tweet ? tweet.tweet : tweet;
   const time = formatDistanceStrict(new Date(), new Date(tweet.createdAt));
@@ -40,26 +39,28 @@ export const Post = ({
       <div
         className={cn(
           "flex flex-col py-2 px-3 pb-1",
-          tweet.isRetweet && "pt-3",
+          (tweet.isRetweet || tweet.isCommunity) && "pt-4",
           className
         )}
       >
         <div
           onClick={() =>
-            router.push(`/${tweet.user.username}/status/${tweet.id}?from=post`)
+            router.push(`/${post.user.username}/status/${post.id}?from=post`)
           }
         >
-          {tweet.isRetweet && (
-            <div className="text-sm flex absolute gap-1 top-0.5 left-[48px] items-center text-muted-foreground">
-              <Repeat2 className="h-3 w-3" />@{tweet.user.username} reposted
-            </div>
-          )}
-          <div
-            className={cn(
-              "flex items-start gap-3 mb-3",
-              tweet.isRetweet && "mt-2"
+          <div className="absolute flex gap-3 top-0.5 left-[48px] line-clamp-1">
+            {tweet.isCommunity && (
+              <div className="text-sm flex gap-1 items-center text-muted-foreground">
+                <Users2 className="h-3 w-3" /> {tweet.community?.name}
+              </div>
             )}
-          >
+            {tweet.isRetweet && (
+              <div className="text-sm flex gap-1 items-center text-muted-foreground">
+                <Repeat2 className="h-3 w-3" />@{tweet.user.username} reposted
+              </div>
+            )}
+          </div>
+          <div className={cn("flex items-start gap-3 mb-3")}>
             <Link
               onClick={(e) => e.stopPropagation()}
               href={`/${post.user.username}`}

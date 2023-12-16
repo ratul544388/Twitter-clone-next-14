@@ -42,7 +42,10 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await axios.post(`/api/tweets/${tweet.id}/retweet`);
+      await axios.post(`/api/tweets/${tweet.id}/retweet`, {
+        communityId: tweet.communityId,
+        isReply: tweet.isReply,
+      });
     },
     onSuccess: () => {
       toast.success("Success");

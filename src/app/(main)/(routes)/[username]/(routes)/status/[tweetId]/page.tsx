@@ -19,6 +19,7 @@ const Page = async ({ params }: { params: { tweetId: string } }) => {
           followers: true,
         },
       },
+      community: true,
       likes: true,
       retweets: true,
       tweet: {

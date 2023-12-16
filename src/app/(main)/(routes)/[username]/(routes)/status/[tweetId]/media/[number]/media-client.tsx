@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
+import { useState } from "react";
 
 interface MediaClientProps {
   tweet: Tweet & {
