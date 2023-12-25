@@ -28,7 +28,7 @@ export const ReplyButton = ({ tweet, refresh, queryKey }: ReplyButtonProps) => {
     >
       <Icon
         icon={MessageCircle}
-        className=" group-hover:bg-sky-50"
+        className=" group-hover:bg-sky-50 dark:group-hover:bg-sky-900/20"
         iconSize={20}
       />
       {replies.length}

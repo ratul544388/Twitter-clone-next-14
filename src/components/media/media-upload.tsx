@@ -20,7 +20,7 @@ export const MediaUpload: FC<IMediaUploadProps> = ({
   return (
     <div
       className={cn(
-        "relative rounded-full hover:bg-sky-50",
+        "relative rounded-full hover:bg-sky-50 dark:hover:bg-sky-900/30",
         endPoint === "singlePhoto" &&
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/30 rounded-full",
         disabled && "pointer-events-none",

@@ -35,7 +35,7 @@ export const Post = ({
   const formattedTime = time.split(" ")[0] + time.split(" ")[1].split("")[0];
 
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative hover:bg-accent/20 dark:hover:bg-accent/10">
       <div
         className={cn(
           "flex flex-col py-2 px-3 pb-1",

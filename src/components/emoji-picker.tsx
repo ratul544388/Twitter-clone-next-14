@@ -19,7 +19,7 @@ export const EmojiPicker: FC<IEmojiPickerProps> = ({ onChange, disabled }) => {
       <PopoverTrigger>
         <Icon
           icon={Smile}
-          className="text-primary hover:bg-sky-500/5"
+          className="text-primary hover:bg-sky-500/5 dark:hover:bg-sky-900/30"
           iconSize={20}
         />
       </PopoverTrigger>

@@ -20,7 +20,7 @@ const HeaderNavigations: React.FC<HeaderNavigationsProps> = ({
         <div
           onClick={() => onChange(item)}
           key={item}
-          className="grow hover:bg-blue-50 cursor-pointer py-3"
+          className="grow hover:bg-blue-50 dark:hover:bg-accent/30 cursor-pointer py-3"
         >
           <div className="w-fit capitalize relative mx-auto font-medium">
             {item.toLowerCase()}

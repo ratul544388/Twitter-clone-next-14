@@ -6,11 +6,13 @@ import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
 import {
   InvalidateQueryFilters,
+  QueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useOptimistic } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
@@ -28,39 +30,49 @@ export const HeartButton = ({
   queryKey,
 }: HeartButtonProps) => {
   const queryClient = useQueryClient();
-  const hasLike = tweet.likes.some((like) => like.id === currentUser.id);
   const router = useRouter();
 
-  const { mutate } = useMutation({
-    mutationFn: async () => {
+  const [optimisticLike, addOptimisticLike] = useOptimistic(
+    tweet.likes,
+    (state: User[], newUser: User) =>
+      state.some((user) => user.id === currentUser.id)
+        ? state.filter((user) => user.id !== currentUser.id)
+        : [...state, newUser]
+  );
+
+  useEffect(() => {
+    const hasLike = optimisticLike.some((like) => like.id === currentUser.id);
+    console.log(hasLike);
+  }, [optimisticLike, currentUser.id]);
+
+  const mutate = async () => {
+    try {
+      addOptimisticLike(currentUser);
       await axios.post(`/api/tweets/${tweet.id}/like`);
-    },
-    onSuccess: () => {
-      if (queryKey) {
-        queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
-      } else {
-        router.refresh();
-      }
-    },
-    onError: () => {
+    } catch (error) {
       toast.error("Something went wrong");
-    },
-  });
+    }
+  };
 
   return (
     <div
       onClick={() => mutate()}
       className={cn(
         "flex items-center cursor-pointer group hover:text-rose-500",
-        hasLike && "text-rose-500"
+        optimisticLike.some((like) => like.id === currentUser.id) &&
+          "text-rose-500"
       )}
     >
       <Icon
         iconSize={size}
-        icon={hasLike ? AiFillHeart : AiOutlineHeart}
-        className=" group-hover:bg-rose-50"
+        icon={
+          optimisticLike.some((like) => like.id === currentUser.id)
+            ? AiFillHeart
+            : AiOutlineHeart
+        }
+        className=" group-hover:bg-rose-50 dark:group-hover:bg-rose-900/10"
       />
-      {tweet.likedUserIds.length}
+      {optimisticLike.length}
     </div>
   );
 };

@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Ratul544",
+};
+
 import getCurrentUser from "@/actions/get-current-user";
 import { FollowButton } from "@/components/follow-button";
 import FollowersInfo from "@/components/followers-info";

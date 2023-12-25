@@ -4,12 +4,13 @@ import { useRoutes } from "@/hooks/use-routes";
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { FaFeather } from "react-icons/fa";
 import Icon from "../icon";
 import { Button } from "../ui/button";
 import UserButton from "./user-button";
-import { usePathname } from "next/navigation";
+import { ThemeToggler } from "../theme-toggler";
 
 interface SidebarProps {
   className?: string;
@@ -40,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
               href={route.href}
               key={route.label}
               className={cn(
-                "flex w-fit capitalize xl:w-auto items-center gap-4 xl:py-2.5 px-3 py-3 hover:bg-blue-50 rounded-full text:md cursor-pointer opacity-90 font-medium",
+                "flex w-fit capitalize xl:w-auto items-center gap-4 xl:py-2.5 px-3 py-3 hover:bg-blue-50 dark:hover:bg-accent/40 rounded-full text:md cursor-pointer opacity-90 font-medium",
                 route.active && "opacity-100 font-semibold"
               )}
             >
@@ -55,7 +56,10 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
             <p className="hidden xl:block">Tweet</p>
             <FaFeather size={18} className="xl:hidden" />
           </Button>
-          <UserButton currentUser={currentUser} />
+          <div className="mt-auto flex flex-col gap-2 items-center xl:items-start">
+            <ThemeToggler className="xl:ml-2" />
+            <UserButton currentUser={currentUser} />
+          </div>
         </div>
       </div>
     </div>

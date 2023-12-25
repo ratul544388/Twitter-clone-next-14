@@ -77,7 +77,7 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
         <Icon
           iconSize={iconSize}
           icon={Repeat2}
-          className=" group-hover:bg-green-50"
+          className=" group-hover:bg-green-50 dark:group-hover:bg-green-900/20"
         />
         {!hideNumber && retweetCount}
       </DropdownMenuTrigger>

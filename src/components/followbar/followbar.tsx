@@ -27,12 +27,13 @@ const Followbar: React.FC<FollowbarProps> = ({ currentUser }) => {
           results
         />
       </div>
-      <div className="rounded-xl py-3 bg-background shadow-lg w-full flex flex-col">
+      <div className="rounded-xl border py-3 bg-background shadow-lg w-full flex flex-col">
         <h1 className="text-xl font-bold p-4 py-0">Who to follow</h1>
         <UserList
           currentUser={currentUser}
           type="WHO_TO_FOLLOW"
           hasFollowButton
+          take={6}
           loadOnces
         />
         <Link

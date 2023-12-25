@@ -1,6 +1,7 @@
 "use client";
 
 import { useOnClickOutside } from "@/hooks/use-on-click-outside";
+import { cn } from "@/lib/utils";
 import { FullUserType } from "@/types";
 import axios from "axios";
 import { SearchIcon } from "lucide-react";
@@ -9,7 +10,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
 import { SingleUser } from "./single-user";
-import { cn } from "@/lib/utils";
 
 interface SearchInputProps {
   value: string;
@@ -66,7 +66,7 @@ export const SearchInput = ({
     <form onSubmit={handleSubmit} className={cn("relative w-full", className)}>
       <div className="relative w-full">
         <input
-          className="rounded-full outline-none pl-3 pr-6 w-full h-9 peer ring-[1.5px] ring-border focus:ring-primary focus:ring-[2px]"
+          className="rounded-full outline-none pl-3 pr-6 w-full h-9 peer ring-[1.5px] ring-border focus:ring-primary focus:ring-[2px] bg-accent/50"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}

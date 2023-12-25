@@ -128,7 +128,7 @@ export const SingleUser = ({
     <div
       onClick={() => clickToProfile && router.push(`/${user.username}`)}
       key={user.id}
-      className="flex items-start gap-3 px-4 py-2 hover:bg-sky-50"
+      className="flex items-start gap-3 px-4 py-2 hover:bg-sky-50 dark:hover:bg-accent/30"
     >
       <Avatar
         image={user.image}
