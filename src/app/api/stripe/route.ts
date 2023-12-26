@@ -44,7 +44,7 @@ export async function GET() {
             currency: "USD",
             product_data: {
               name: "Blue Badge",
-            //   images: [imageUrl],
+              //   images: [imageUrl],
               description:
                 "Get Blue Badge and more advantages will be added soon",
             },
