@@ -30,6 +30,11 @@ export type FullCommunityType = Community & {
   requestedUsers: User[];
 };
 
+export type InitialTweetsType = {
+  items: FullTweetType[];
+  nextCursor: string | null;
+};
+
 export type QueryType =
   | "TWEETS"
   | "REPLIES"

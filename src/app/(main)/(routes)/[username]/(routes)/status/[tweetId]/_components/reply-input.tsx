@@ -52,9 +52,9 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ currentUser, tweet }) => {
       await axios.post(`/api/tweets/${tweet.id}/reply`, {
         ...values,
       });
-      toast.success("Tweet posted");
+      toast.success("Replied");
       form.reset();
-      queryClient.invalidateQueries(["FOR YOU"] as InvalidateQueryFilters);
+      queryClient.invalidateQueries([tweet.id] as InvalidateQueryFilters);
     } catch (error) {
       toast.error("Something went wrong");
     }

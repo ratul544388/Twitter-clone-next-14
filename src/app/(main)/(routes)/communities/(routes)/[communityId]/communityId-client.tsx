@@ -123,7 +123,7 @@ export const CommunityIdClient = ({
         <Feed
           type="TWEETS"
           currentUser={currentUser}
-          community={community}
+          communityId={community.id}
         />
       ) : active === "REQUESTS" ? (
         <UserList

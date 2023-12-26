@@ -10,7 +10,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState = ({
-  title = "No result found",
+  title = "No items found",
   className,
   children,
 }: EmptyStateProps) => {

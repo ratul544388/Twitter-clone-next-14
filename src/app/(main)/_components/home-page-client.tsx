@@ -1,20 +1,28 @@
 "use client";
 
 import TweetInput from "@/components/tweet-input";
-import { FullUserType, QueryType } from "@/types";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  FullUserType,
+  InitialTweetsType,
+  QueryType
+} from "@/types";
+import Link from "next/link";
 import { useState } from "react";
 import { Feed } from "./feed";
 import Header from "./header";
 import { UserList } from "./user-list";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 interface HomePageClientProps {
   currentUser: FullUserType;
+  initialTweets?: InitialTweetsType;
 }
 
-const HomePageClient: React.FC<HomePageClientProps> = ({ currentUser }) => {
+const HomePageClient: React.FC<HomePageClientProps> = ({
+  currentUser,
+  initialTweets,
+}) => {
   const navigations: QueryType[] = ["FOR YOU", "FOLLOWING"];
   const [active, setActive] = useState<QueryType>("FOR YOU");
 
@@ -44,7 +52,11 @@ const HomePageClient: React.FC<HomePageClientProps> = ({ currentUser }) => {
         </div>
       )}
       <Separator />
-      <Feed currentUser={currentUser} type={active} />
+      <Feed
+        currentUser={currentUser}
+        type={active}
+        initialTweets={initialTweets}
+      />
     </div>
   );
 };

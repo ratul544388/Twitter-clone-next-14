@@ -1,84 +1,49 @@
 "use client";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import qs from "query-string";
-import { Fragment, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-import { Post } from "./post";
-import { LoadingError } from "@/components/loading-error";
-import { Separator } from "@/components/ui/separator";
-import { FullCommunityType, FullTweetType, QueryType } from "@/types";
-import { User } from "@prisma/client";
-import { useSearchParams } from "next/navigation";
 import { EmptyState } from "@/components/empty-state";
+import { LoadingError } from "@/components/loading-error";
+import { useInfinityTweets } from "@/hooks/use-infinity-tweets";
+import {
+  FullTweetType,
+  InitialTweetsType,
+  QueryType
+} from "@/types";
+import { User } from "@prisma/client";
+import { Post } from "./post";
 
 interface FeedProps {
+  initialTweets?: InitialTweetsType;
   currentUser: User;
   type: QueryType;
-  community?: FullCommunityType;
+  communityId?: string;
   tweetId?: string;
   userId?: string;
   media?: boolean;
   searchQuery?: boolean;
+  limit?: number;
+  q?: string;
 }
 
 export const Feed = ({
+  initialTweets,
   currentUser,
   type,
-  community,
+  communityId,
   tweetId,
   userId,
   media,
-  searchQuery,
+  q,
+  limit,
 }: FeedProps) => {
-  const { ref, inView } = useInView();
-  const searchParams = useSearchParams();
-  const q = searchQuery ? searchParams.get("q") : null;
-
-  const fetchTweets = async ({ pageParam = undefined }) => {
-    const url = qs.stringifyUrl(
-      {
-        url: "/api/tweets",
-        query: {
-          cursor: pageParam,
-          type,
-          communityId: community?.id,
-          tweetId,
-          userId,
-          q,
-        },
-      },
-      { skipEmptyString: true, skipNull: true }
-    );
-
-    const res = await fetch(url);
-    return res.json();
-  };
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-    refetch,
-  } = useInfiniteQuery({
-    queryKey: [type],
-    queryFn: fetchTweets,
-    getNextPageParam: (lastPage) => lastPage?.nextCursor,
-    initialPageParam: undefined,
-  });
-
-  useEffect(() => {
-    if (q) {
-      refetch();
-    }
-  }, [q, refetch]);
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, fetchNextPage, inView]);
+  const { status, tweets, hasNextPage, isFetchingNextPage, isRefetching, ref } =
+    useInfinityTweets({
+      initialTweets,
+      type,
+      limit,
+      userId,
+      tweetId,
+      communityId,
+      q,
+    });
 
   if (status === "pending") {
     return <Post.Skeleton count={5} media={media} />;
@@ -88,30 +53,21 @@ export const Feed = ({
     return <LoadingError />;
   }
 
-  if (!data.pages[0].items.length) {
-    return <EmptyState title="No tweet found" />;
+  if (!tweets?.length) {
+    return <EmptyState title="No tweets found" />;
   }
 
   return (
     <div>
-      {data?.pages?.map((page, i) => (
-        <Fragment key={i}>
-          {page?.items?.map((tweet: FullTweetType) => (
-            <Fragment key={tweet.id}>
-              <Post
-                key={tweet.id}
-                tweet={tweet}
-                currentUser={currentUser}
-                queryKey={type}
-              />
-            </Fragment>
-          ))}
-        </Fragment>
+      {tweets.map((tweet: FullTweetType) => (
+        <Post key={tweet.id} tweet={tweet} currentUser={currentUser} queryKey={type} />
       ))}
-      {hasNextPage && (
+      {hasNextPage ? (
         <div>
           {isFetchingNextPage && <Post.Skeleton count={7} media={media} />}
         </div>
+      ) : (
+        <EmptyState title="No more tweets to load" />
       )}
       <div ref={ref} />
     </div>

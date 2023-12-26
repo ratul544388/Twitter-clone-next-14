@@ -2,7 +2,6 @@
 
 import { Post } from "@/app/(main)/_components/post";
 import { LoadingError } from "@/components/loading-error";
-import { Separator } from "@/components/ui/separator";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -35,7 +34,7 @@ const Replies: React.FC<RepliesProps> = ({ tweet, currentUser }) => {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useInfiniteQuery({
-      queryKey: [queryKey],
+      queryKey: [tweet.id, queryKey],
       queryFn: fetchTweets,
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
       initialPageParam: undefined,
