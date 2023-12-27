@@ -1,3 +1,5 @@
+import { FullUserType } from "@/types";
+import { User } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

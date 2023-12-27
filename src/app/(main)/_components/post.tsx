@@ -14,6 +14,8 @@ import PostMenu from "./post-menu";
 import ReactSection from "./react-section";
 import { formatDistanceStrict } from "date-fns";
 import { useRouter } from "next/navigation";
+import { BiSolidBadgeCheck } from "react-icons/bi";
+import { checkBlueBadgeSubscription } from "@/lib/blue-badge-subscription";
 
 interface PostProps {
   currentUser: User;
@@ -29,6 +31,7 @@ export const Post = ({
   className,
 }: PostProps) => {
   const router = useRouter();
+
   const post = tweet.isRetweet && tweet.tweet ? tweet.tweet : tweet;
   const time = formatDistanceStrict(new Date(), new Date(tweet.createdAt));
 
@@ -69,13 +72,18 @@ export const Post = ({
             </Link>
             <div className="flex flex-col w-full">
               <div className="flex items-center gap-2">
-                <Link
-                  onClick={(e) => e.stopPropagation()}
-                  href={`/${tweet.user.username}`}
-                  className="font-semibold line-clamp-1 hover:underline"
-                >
-                  {post.user.name}
-                </Link>
+                <div className="flex items-center gap-1">
+                  <Link
+                    onClick={(e) => e.stopPropagation()}
+                    href={`/${tweet.user.username}`}
+                    className="font-semibold line-clamp-1 hover:underline"
+                  >
+                    {post.user.name}
+                  </Link>
+                  {checkBlueBadgeSubscription(post.user) && (
+                    <BiSolidBadgeCheck className="h-5 w-5 text-primary" />
+                  )}
+                </div>
                 <p className="text-muted-foreground line-clamp-1">
                   @{post.user.username}
                 </p>

@@ -162,6 +162,7 @@ export const getTweets = async ({
         user: {
           include: {
             followers: true,
+            blueBadgeSubscription: true,
           },
         },
         community: true,
@@ -170,6 +171,7 @@ export const getTweets = async ({
             user: {
               include: {
                 followers: true,
+                blueBadgeSubscription: true,
               },
             },
             likes: true,

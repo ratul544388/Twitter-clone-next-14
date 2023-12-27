@@ -124,10 +124,12 @@ export const useRoutes = ({
         active: ["/communities"].includes(pathname),
       },
       {
-        label: "Messages",
-        icon: pathname.includes("messages") ? BiSolidEnvelope : BiEnvelope,
-        href: "/messages",
-        active: pathname === "/messages",
+        label: "Blue badge",
+        icon: pathname.includes("blue-badge")
+          ? HiBadgeCheck
+          : HiOutlineBadgeCheck,
+        href: "/blue-badge",
+        active: pathname === "/blue-badge",
       },
     ];
   }

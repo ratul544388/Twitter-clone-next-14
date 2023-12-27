@@ -36,6 +36,8 @@ model User {
 
   communityRequestIds String[]    @db.ObjectId
   communityRequests   Community[] @relation("Request", fields: [communityRequestIds], references: [id])
+
+  blueBadgeSubscription BlueBadgeSubscription?
 }
 
 model Follow {
@@ -106,7 +108,8 @@ model Tweet {
 
 model BlueBadgeSubscription {
   id                     String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId                 String    @unique
+  userId                 String    @unique @db.ObjectId
+  user                   User      @relation(fields: [userId], references: [id])
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?   @unique @map(name: "stripe_price_id")

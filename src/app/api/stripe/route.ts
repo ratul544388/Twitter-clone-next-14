@@ -18,7 +18,7 @@ export async function GET() {
 
     const userSubscription = await db.blueBadgeSubscription.findUnique({
       where: {
-        userId,
+        userId: currentUser.id,
       },
     });
 
@@ -57,7 +57,7 @@ export async function GET() {
         },
       ],
       metadata: {
-        userId,
+        userId: currentUser.id,
       },
     });
 

@@ -42,13 +42,13 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col select-none gap-2 bg-background sticky top-0 z-40",
+        "realtive flex flex-col select-none gap-2 bg-background sticky top-0 z-40",
         border && "border-b-[1.5px]",
         className
       )}
     >
       <div
-        className={cn("flex items-center p-2 gap-2", !showBackButton && "pl-4")}
+        className={cn("flex items-center p-2 gap-2", !showBackButton && "pl-4", mobileSidebar && "mt-2")}
       >
         {mobileSidebar && currentUser && (
           <MobileSidebar currentUser={currentUser} />

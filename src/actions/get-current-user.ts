@@ -1,39 +1,26 @@
-import { currentUser, redirectToSignIn } from "@clerk/nextjs";
+import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 
 import db from "@/lib/db";
 export default async function getCurrentUser() {
   try {
-    const user = await currentUser();
+    const { userId } = auth();
 
-    if (!user) {
+    if (!userId) {
       return redirectToSignIn();
     }
 
-    const existingUser = await db.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
-        userId: user.id,
+        userId,
       },
       include: {
         followers: true,
         followings: true,
+        blueBadgeSubscription: true,
       },
     });
 
-    if (existingUser) {
-      return existingUser;
-    }
-
-    const newUser = await db.user.create({
-      data: {
-        userId: user.id,
-        image: user.imageUrl,
-        name: `${user.firstName} ${user.lastName}`,
-        username: `${user.username}`,
-        email: user.emailAddresses[0].emailAddress,
-      },
-    });
-
-    return newUser;
+    return user;
   } catch (error: any) {
     console.log(error);
     return null;

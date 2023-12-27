@@ -1,16 +1,25 @@
-import { Community, Follow, Member, Tweet, User } from "@prisma/client";
+import {
+  BlueBadgeSubscription,
+  Community,
+  Follow,
+  Member,
+  Tweet,
+  User,
+} from "@prisma/client";
 
 export type FullTweetType = Tweet & {
   retweets: Tweet[];
   likes: User[];
   user: User & {
     followers: Follow[];
+    blueBadgeSubscription: BlueBadgeSubscription | null;
   };
   community?: Community | null;
   tweet?:
     | (Tweet & {
         user: User & {
           followers: Follow[];
+          blueBadgeSubscription: BlueBadgeSubscription | null;
         };
         likes: User[];
         retweets: Tweet[];
@@ -21,6 +30,10 @@ export type FullTweetType = Tweet & {
 export type FullUserType = User & {
   followers: Follow[];
   followings: Follow[];
+};
+
+export type UserWithBlueBadge = User & {
+  blueBadgeSubscription: BlueBadgeSubscription | null;
 };
 
 export type FullCommunityType = Community & {

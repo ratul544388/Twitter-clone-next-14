@@ -1,34 +1,17 @@
-import { auth } from "@clerk/nextjs";
-import db from "./db";
+import { UserWithBlueBadge } from "@/types";
 
 const DAY_IN_MS = 86_400_000;
 
-const checkSubscription = async () => {
-  const { userId } = auth();
+export const checkBlueBadgeSubscription = (user: UserWithBlueBadge) => {
+  const { blueBadgeSubscription } = user;
 
-  if (!userId) {
-    return false;
-  }
-
-  const userSubscription = await db.blueBadgeSubscription.findUnique({
-    where: {
-      userId,
-    },
-    select: {
-      stripeCustomerId: true,
-      stripeSubscriptionId: true,
-      stripeCurrentPeriodEnd: true,
-      stripePriceId: true,
-    },
-  });
-
-  if (!userSubscription) {
+  if (!blueBadgeSubscription) {
     return false;
   }
 
   const isValid =
-    userSubscription.stripePriceId &&
-    userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS >
+    blueBadgeSubscription.stripePriceId &&
+    blueBadgeSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS >
       Date.now();
 
   return !!isValid;

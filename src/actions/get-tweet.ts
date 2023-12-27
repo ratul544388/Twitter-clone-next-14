@@ -11,6 +11,7 @@ export const getTweet = async ({ tweetId }: { tweetId: string }) => {
       user: {
         include: {
           followers: true,
+          blueBadgeSubscription: true,
         },
       },
       community: true,
@@ -21,6 +22,7 @@ export const getTweet = async ({ tweetId }: { tweetId: string }) => {
           user: {
             include: {
               followers: true,
+              blueBadgeSubscription: true,
             },
           },
           likes: true,

@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 import Header from "../../../_components/header";
 import { EditProfileButton } from "../_components/edit-profile-button";
 import ProfileTweets from "../_components/profile-tweets";
+import { BiSolidBadgeCheck } from "react-icons/bi";
+import { checkBlueBadgeSubscription } from "@/lib/blue-badge-subscription";
 
 const UsernamePage = async ({ params }: { params: { username: string } }) => {
   const user = await db.user.findUnique({
@@ -19,6 +21,7 @@ const UsernamePage = async ({ params }: { params: { username: string } }) => {
     include: {
       followers: true,
       followings: true,
+      blueBadgeSubscription: true,
     },
   });
 
@@ -65,7 +68,12 @@ const UsernamePage = async ({ params }: { params: { username: string } }) => {
         )}
       </div>
       <div className="flex flex-col p-3 mt-3">
-        <h1 className="font-bold text-lg ">{user.name}</h1>
+        <div className="flex items-center gap-1">
+          <h1 className="font-bold text-lg ">{user.name}</h1>
+          {checkBlueBadgeSubscription(user) && (
+            <BiSolidBadgeCheck className="h-5 w-5 text-primary" />
+          )}
+        </div>
         <p className="text-muted-foreground">@{user.username}</p>
         <p className="text-muted-foreground mt-3">{user.bio}</p>
         <div className="text-muted-foreground flex items-center mt-1 mb-2">
