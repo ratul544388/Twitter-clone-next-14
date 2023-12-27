@@ -70,7 +70,7 @@ export const Post = ({
             >
               <Avatar image={post.user.image} size={38} />
             </Link>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full overflow-hidden">
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
                   <Link
@@ -95,7 +95,7 @@ export const Post = ({
                   currentUser={currentUser}
                 />
               </div>
-              <p>{post.caption}</p>
+              <p className="break-words">{post.caption}</p>
               <MediaPreview tweet={tweet} />
             </div>
           </div>

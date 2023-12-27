@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { Avatar } from "../avatar";
 import FollowersInfo from "../followers-info";
 import { Separator } from "../ui/separator";
+import { ThemeToggler } from "../theme-toggler";
 
 interface MobileSidebarProps {
   currentUser: FullUserType;
@@ -62,7 +63,8 @@ export function MobileSidebar({ currentUser }: MobileSidebarProps) {
               </div>
             ))}
           </div>
-          <div className="flex flex-col mt-auto w-full">
+          <div className="flex flex-col gap-5 mt-auto w-full">
+            <ThemeToggler className="ml-10" />
             <SignOutButton>
               <div
                 onClick={() => setOpen(false)}

@@ -63,7 +63,7 @@ export const CommunityIdClient = ({
       <Header
         label={community.name}
         showBackButton
-      backButtonUrl="/communities"
+        backButtonUrl="/communities"
       >
         <>
           {creator?.userId === currentUser.id && (
@@ -164,8 +164,6 @@ export const CommunityIdClient = ({
             hasFollowButton
             hasBio
             community={community}
-            take={3}
-            loadOnces
             dropdownMenuForCommunityModerators
           />
           <h1 className="font-extrabold text-xl pl-4">Members</h1>
@@ -176,18 +174,8 @@ export const CommunityIdClient = ({
             hasFollowButton
             hasBio
             community={community}
-            take={8}
-            loadOnces
             dropdownMenuForCommunityModerators
           />
-          <Link
-            href=""
-            className={buttonVariants({
-              variant: "link",
-            })}
-          >
-            Show more
-          </Link>
         </div>
       )}
     </div>

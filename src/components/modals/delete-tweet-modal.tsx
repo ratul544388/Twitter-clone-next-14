@@ -30,12 +30,7 @@ export function DeleteTweetModal() {
     },
     onSuccess: () => {
       toast.success("Tweet was deleted");
-      if (queryKey) {
-        queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
-      } else {
-        router.back();
-        router.refresh();
-      }
+      queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
       onClose();
     },
   });

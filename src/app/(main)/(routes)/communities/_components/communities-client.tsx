@@ -48,7 +48,7 @@ export const CommunitiesClient = ({
             <Button variant="outline" onClick={() => onOpen("communityModal")}>
               Create community
             </Button>
-            <Button onClick={() => router.push(`/communities/recomended`)}>
+            <Button onClick={() => router.push(`/communities/suggested`)}>
               Join community
             </Button>
           </div>

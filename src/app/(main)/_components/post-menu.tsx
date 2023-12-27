@@ -54,7 +54,7 @@ const PostMenu: React.FC<PostMenuProps> = ({
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-500 focus:text-red-500"
-              onClick={() => onOpen("tweetModal", { tweet, queryKey })}
+              onClick={() => onOpen("deleteTweetModal", { tweet, queryKey })}
             >
               <Trash className="h-4 w-4 mr-2" />
               Delete

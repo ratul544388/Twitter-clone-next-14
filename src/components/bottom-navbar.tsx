@@ -34,7 +34,7 @@ export const BottomNavbar = () => {
     <div
       className={`navbar ${
         visible ? "translate-y-0" : "translate-y-full"
-      } bg-background xs:hidden shadow-lg flex items-center justify-between border-t p-1 fixed bottom-0 w-full transition-transform duration-300 ease-in-out`}
+      } bg-background xs:hidden shadow-lg flex items-center justify-around border-t p-1 fixed bottom-0 w-full transition-transform duration-300 ease-in-out`}
     >
       {routes.map((route) => (
         <Link href={route.href} key={route.href}>

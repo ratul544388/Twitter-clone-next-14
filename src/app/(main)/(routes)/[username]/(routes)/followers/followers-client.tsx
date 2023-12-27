@@ -11,9 +11,14 @@ import { useEffect, useState } from "react";
 interface FollowersClientProps {
   user: User;
   active: QueryType;
+  currentUser: User;
 }
 
-export const FollowersClient = ({ user, active }: FollowersClientProps) => {
+export const FollowersClient = ({
+  user,
+  active,
+  currentUser,
+}: FollowersClientProps) => {
   const pathname = usePathname();
   const navigations: QueryType[] = ["FOLLOWERS", "FOLLOWINGS"];
   const router = useRouter();
@@ -32,7 +37,13 @@ export const FollowersClient = ({ user, active }: FollowersClientProps) => {
         label={formatText(active)}
         border
       />
-      <UserList type={active} hasFollowButton hasBio userId={user.id} />
+      <UserList
+        type={active}
+        hasFollowButton
+        hasBio
+        userId={user.id}
+        currentUser={currentUser}
+      />
     </>
   );
 };
