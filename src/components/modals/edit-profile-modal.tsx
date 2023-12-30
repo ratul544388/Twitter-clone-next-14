@@ -9,6 +9,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+
 import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +26,10 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect } from "react";
 import { ProfilePhoto } from "../media/profile-photo";
+import { Dialog, DialogContent } from "../ui/dialog";
+import { Separator } from "../ui/separator";
+import { MediaUpload } from "../media/media-upload";
+import { EmojiPicker } from "../emoji-picker";
 
 const formSchema = z.object({
   name: z
@@ -65,7 +70,6 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
     form.setValue("bio", currentUser.bio || "");
   }, [currentUser, form, isOpen]);
 
-  const open = isOpen && type === "editProfileModal";
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -90,32 +94,15 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
   };
 
   return (
-    <div
-      onClick={onClose}
-      className={cn(
-        "fixed z-50 inset-0 bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none",
-        open && "opacity-100 pointer-events-auto"
-      )}
+    <Dialog
+      open={isOpen && type === "editProfileModal"}
+      onOpenChange={handleClose}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className={cn(
-          "max-w-[500px] w-full shadow-lg overflow-hidden rounded-xl bg-background border absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all opacity-20",
-          open && "opacity-100"
-        )}
-      >
-        <div className="sticky h-[50px] bg-background/80">
-          <Icon
-            onClick={handleClose}
-            icon={X}
-            className="absolute left-1 top-1/2 -translate-y-1/2"
-          />
-        </div>
+      <DialogContent className="pb-2 px-0 gap-2 pt-12 flex flex-col max-h-[100svh]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="overflow-y-auto"
-            style={{ maxHeight: "calc(100vh - 180px" }}
           >
             <FormField
               control={form.control}
@@ -191,16 +178,14 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
             </div>
           </form>
         </Form>
-        <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
-          <Button
-            disabled={form.formState.isSubmitting}
-            className="ml-auto"
-            onClick={form.handleSubmit(onSubmit)}
-          >
-            Save
-          </Button>
-        </div>
-      </div>
-    </div>
+        <Button
+          disabled={form.formState.isSubmitting}
+          className="ml-auto mr-4"
+          onClick={form.handleSubmit(onSubmit)}
+        >
+          Save
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 };

@@ -1,4 +1,6 @@
 "use client";
+import { AdminLeavingCommunityModal } from "@/components/modals/admin-leaving-community-modal";
+import { CancelCommunityRequestModal } from "@/components/modals/cancel-community-request-modal";
 import { CommunityModal } from "@/components/modals/community-modal";
 import { DeleteCommunityModal } from "@/components/modals/delete-community-modal";
 import { DeleteTweetModal } from "@/components/modals/delete-tweet-modal";
@@ -34,6 +36,8 @@ const ModalProvider = ({ currentUser }: { currentUser: User | null }) => {
       <MakingCommunityAdminModal />
       <LeaveCommunityModal />
       <DeleteCommunityModal />
+      <AdminLeavingCommunityModal />
+      <CancelCommunityRequestModal />
       <DeleteTweetModal />
     </>
   );

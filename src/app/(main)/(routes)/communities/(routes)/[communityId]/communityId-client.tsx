@@ -6,7 +6,7 @@ import HeaderNavigations from "@/app/(main)/_components/header-navigations";
 import { UserList } from "@/app/(main)/_components/user-list";
 import Icon from "@/components/icon";
 import { CoverPhoto } from "@/components/media/cover-photo";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +26,10 @@ import {
   Trash,
   Users2,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { CircularPhotos } from "../../_components/circular-photos";
 import { CommunityJoiningButton } from "../../_components/community-joining-button";
+import { FaFeather } from "react-icons/fa";
 
 interface CommunityIdClientProps {
   community: FullCommunityType;
@@ -92,7 +92,17 @@ export const CommunityIdClient = ({
       <CoverPhoto value={community.coverPhoto} className="h-[200px]" />
       <div className="h-3 w-full bg-sky-500/60" />
       <div className="flex flex-col gap-6 bg-primary text-white p-4">
-        <h1 className="text-2xl font-bold">{community.name}</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">{community.name}</h1>
+          <Button
+            onClick={() => onOpen("tweetModal", { communityId: community.id })}
+            variant="secondary"
+            className="bg-slate-100 hover:bg-slate-100/90 text-zinc-800 hidden sm:flex"
+          >
+            <FaFeather className="h-4 w-4 text-primary mr-2" />
+            Tweet
+          </Button>
+        </div>
         <div className="flex sm:items-center justify-between gap-4 sm:flex-row flex-col">
           <div className="flex items-center gap-3">
             <CircularPhotos community={community} />
@@ -102,14 +112,27 @@ export const CommunityIdClient = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Icon
-              icon={Share}
-              className="bg-white text-black p-2.5 hover:bg-white/90"
-            />
+            <Button
+              variant="secondary"
+              className="bg-slate-100 hover:bg-slate-100/90 text-zinc-800"
+              size="icon"
+            >
+              <Share className="h-4 w-4" />
+            </Button>
             <CommunityJoiningButton
               community={community}
               currentUser={currentUser}
             />
+            <Button
+              onClick={() =>
+                onOpen("tweetModal", { communityId: community.id })
+              }
+              variant="secondary"
+              className="bg-slate-100 hover:bg-slate-100/90 text-zinc-800 ml-auto sm:hidden"
+            >
+              <FaFeather className="h-4 w-4 text-primary mr-2" />
+              Tweet
+            </Button>
           </div>
         </div>
       </div>

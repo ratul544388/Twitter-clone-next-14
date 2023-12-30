@@ -17,44 +17,52 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export function DeleteTweetModal() {
+export function AdminLeavingCommunityModal() {
   const { isOpen, onClose, type, data } = useModal();
-  const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { tweet, queryKey } = data;
+  const { community } = data;
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await axios.delete(`/api/tweets/${tweet?.id}`);
+      await axios.post(`/api/communities/${community?.id}/leave`);
     },
     onSuccess: () => {
-      toast.success("Tweet was deleted");
-      queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
-      onClose();
+      toast.success(`You leaved the community`);
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Something went wrong");
     },
   });
 
   return (
-    <Dialog open={isOpen && type === "deleteTweetModal"} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen && type === "adminLeavingCommunityModal"}
+      onOpenChange={onClose}
+    >
       <DialogContent className="max-w-[300px] pb-3">
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription>Delete the tweet permanently.</DialogDescription>
+          <DialogDescription className="text-red-500">
+            Worning!!! You cannot leave the community since you are the admin of
+            the community. To leave the community you have to make someone else
+            admin first.
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={onClose}
             className="w-full"
             disabled={isPending}
+            onClick={onClose}
           >
             Cancel
           </Button>
           <Button
             variant="destructive"
             className="w-full"
-            disabled={isPending}
+            disabled
             onClick={() => mutate()}
           >
             Confirm

@@ -25,6 +25,10 @@ export const CommunityJoiningButton = ({
     return member.userId === currentUser.id;
   });
 
+  const isAdmin = community.members.some((member) => {
+    return member.userId === currentUser.id && member.role === "ADMIN";
+  });
+
   const isRequested = community.requestedUserIds.some((id) => {
     return id === currentUser.id;
   });
@@ -42,13 +46,20 @@ export const CommunityJoiningButton = ({
       onClose();
       router.refresh();
     },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
   });
 
   const handleClick = () => {
-    if (isMember) {
-      return onOpen("leaveCommunityModal", { community });
+    if (isAdmin) {
+      return onOpen("adminLeavingCommunityModal");
+    } else if (isMember) {
+      return onOpen("leaveCommunityModal", { communityId: community.id });
     } else if (isRequested) {
-      return onOpen("cancelCommunityRequestModal");
+      return onOpen("cancelCommunityRequestModal", {
+        communityId: community.id,
+      });
     } else {
       mutate();
     }
@@ -59,8 +70,8 @@ export const CommunityJoiningButton = ({
       <Button
         disabled={isPending}
         onClick={handleClick}
-        variant="outline"
-        className="text-black"
+        variant="secondary"
+        className="bg-slate-100 hover:bg-slate-100/90 text-zinc-800"
       >
         {isMember ? "Joined" : isRequested ? "Requested" : "Join"}
       </Button>

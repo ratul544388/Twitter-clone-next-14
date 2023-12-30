@@ -1,13 +1,11 @@
 "use client";
 
 import { useModal } from "@/hooks/use-modal-store";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useForm } from "react-hook-form";
@@ -15,12 +13,13 @@ import toast from "react-hot-toast";
 import * as z from "zod";
 import { Avatar } from "../avatar";
 import { EmojiPicker } from "../emoji-picker";
-import Icon from "../icon";
 import { MediaUpload } from "../media/media-upload";
-import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Dialog, DialogContent, DialogFooter } from "../ui/dialog";
+import { Separator } from "../ui/separator";
 import { UploadPreview } from "../upload-preview";
 
 const formSchema = z.object({
@@ -40,13 +39,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
   const caption = form.getValues("caption");
   const media = form.getValues("media");
   const queryClient = useQueryClient();
-  const open = isOpen && type === "tweetModal";
   const { tweet, communityId } = data;
-
-  const handleClose = () => {
-    onClose();
-    form.reset();
-  };
 
   useEffect(() => {
     if (tweet) {
@@ -79,37 +72,23 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
     }
   };
 
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  };
+
   return (
-    <div
-      onClick={handleClose}
-      className={cn(
-        "fixed z-50 inset-0 bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none",
-        open && "opacity-100 pointer-events-auto"
-      )}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className={cn(
-          "max-w-[500px] w-full shadow-lg overflow-hidden rounded-xl bg-background border absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all opacity-20",
-          open && "opacity-100"
-        )}
-      >
-        <div className="sticky flex items-center justify-center h-[50px] bg-background/80">
-          <Icon
-            onClick={handleClose}
-            icon={X}
-            iconSize={20}
-            className="absolute left-1 top-1/2 -translate-y-1/2"
-          />
-          <h1 className="font-semibold text-muted-foreground">
-            {communityId && "Community post"}
+    <Dialog open={isOpen && type === "tweetModal"} onOpenChange={handleClose}>
+      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col max-h-[100svh]">
+        {communityId && (
+          <h1 className="absolute top-1 left-1/2 -translate-x-1/2">
+            Community Post
           </h1>
-        </div>
+        )}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="px-6 space-y-2 overflow-y-auto pb-3"
-            style={{ maxHeight: "calc(100vh - 180px" }}
+            className="flex-1 flex-grow"
           >
             <div className="flex items-start">
               <Avatar image={currentUser?.image} />
@@ -121,6 +100,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
                     <FormControl>
                       <Textarea
                         placeholder="What's happening?!"
+                        className="max-h-[84svh]"
                         value={field.value}
                         onChange={(e) => {
                           form.setValue("caption", e.target.value, {
@@ -142,7 +122,8 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
             />
           </form>
         </Form>
-        <div className="sticky bg-background h-[50px] px-3 border-t flex items-center">
+        <Separator />
+        <div className="flex items-center justify-between">
           <div className="flex">
             <MediaUpload
               endPoint="multiMedia"
@@ -158,7 +139,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
               disabled={isLoading}
             />
           </div>
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-3">
             <CircularProgressbar
               maxValue={300}
               value={caption.length}
@@ -173,7 +154,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

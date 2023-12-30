@@ -17,7 +17,7 @@ export type ModalType =
   | "makingCommunityAdminModal"
   | "kickCommunityModal"
   | "mediaViewerModal"
-
+  | "adminLeavingCommunityModal";
 interface ModalData {
   user?: User;
   tweet?: FullTweetType;

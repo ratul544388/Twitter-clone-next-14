@@ -77,6 +77,8 @@ export const UserList = ({
     queryFn: fetchData,
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
     initialPageParam: undefined,
+    staleTime: Infinity,
+    retry: 3,
   });
 
   useEffect(() => {

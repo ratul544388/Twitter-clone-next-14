@@ -9,38 +9,41 @@ import {
 } from "@/components/ui/dialog";
 import { useModal } from "@/hooks/use-modal-store";
 import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
+  useMutation
 } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export function DeleteTweetModal() {
+export function CancelCommunityRequestModal() {
   const { isOpen, onClose, type, data } = useModal();
-  const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { tweet, queryKey } = data;
+  const { communityId } = data;
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await axios.delete(`/api/tweets/${tweet?.id}`);
+      await axios.delete(`/api/communities/${communityId}/cancel-request`);
     },
     onSuccess: () => {
-      toast.success("Tweet was deleted");
-      queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
+      toast.success("Request cancelled");
+      router.refresh();
       onClose();
+    },
+    onError: () => {
+      toast.error("Something went wrong");
     },
   });
 
   return (
-    <Dialog open={isOpen && type === "deleteTweetModal"} onOpenChange={onClose}>
-      <DialogContent className="max-w-[300px] pb-3">
+    <Dialog
+      open={isOpen && type === "cancelCommunityRequestModal"}
+      onOpenChange={onClose}
+    >
+      <DialogContent className="pb-2 max-w-[300px]">
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
-          <DialogDescription>Delete the tweet permanently.</DialogDescription>
+          <DialogDescription>Cancel the community request</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button

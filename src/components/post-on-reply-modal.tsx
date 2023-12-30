@@ -10,7 +10,7 @@ interface PostOnReplyModalProps {
 
 const PostOnReplyModal: React.FC<PostOnReplyModalProps> = ({ tweet }) => {
   return (
-    <div className="flex relative items-start gap-3 ml-[26px] boderrounded-2xl mb-4">
+    <div className="flex relative items-start gap-3 rounded-2xl max-h-[50svh] overflow-y-auto">
       <Separator
         className="absolute h-full w-[3px] rounded-full left-5 -translate-x-1/2 top-[50px]"
         orientation="vertical"

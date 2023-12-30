@@ -21,13 +21,14 @@ export function LeaveCommunityModal() {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const { community } = data;
+  const { communityId } = data;
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await axios.post(`/api/communities/${community?.id}/leave`);
+      await axios.post(`/api/communities/${communityId}/leave`);
     },
     onSuccess: () => {
+      onClose();
       toast.success(`You leaved the community`);
       router.refresh();
     },
@@ -38,20 +39,15 @@ export function LeaveCommunityModal() {
       open={isOpen && type === "leaveCommunityModal"}
       onOpenChange={onClose}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[300px] pb-3">
         <DialogHeader>
-          <DialogTitle>
-            Are you sure you want to leave the community?
-          </DialogTitle>
-          <DialogDescription>
-            This Action cannot be undone. You can join or request to join
-            community again.
-          </DialogDescription>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogDescription>Leave the community?</DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex mt-5 xs:flex-row flex-col gap-3 xs:ml-auto">
+        <DialogFooter>
           <Button
             variant="outline"
-            className="xs:w-fit w-full"
+            className="w-full"
             disabled={isPending}
             onClick={onClose}
           >
@@ -59,7 +55,7 @@ export function LeaveCommunityModal() {
           </Button>
           <Button
             variant="destructive"
-            className="xs:w-fit w-full"
+            className="w-full"
             disabled={isPending}
             onClick={() => mutate()}
           >

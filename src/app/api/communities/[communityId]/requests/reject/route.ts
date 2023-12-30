@@ -13,8 +13,8 @@ export async function POST(
       },
       data: {
         requestedUsers: {
-          delete: {
-            userId: userId,
+          disconnect: {
+            id: userId,
           },
         },
       },

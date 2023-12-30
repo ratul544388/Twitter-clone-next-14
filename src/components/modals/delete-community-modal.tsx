@@ -38,24 +38,20 @@ export function DeleteCommunityModal() {
       open={isOpen && type === "deleteCommunityModal"}
       onOpenChange={onClose}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[300px] pb-3">
         <DialogHeader>
-          <DialogTitle>
-            Are you sure you want to delete the community?
-          </DialogTitle>
-          <DialogDescription>This Action cannot be undone.</DialogDescription>
+          <DialogTitle>Are you sure</DialogTitle>
+          <DialogDescription>
+            Delete the community permanently?
+          </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex mt-4 xs:flex-row flex-col gap-3 xs:ml-auto">
-          <Button
-            variant="outline"
-            className="xs:w-fit w-full"
-            disabled={isPending}
-          >
+        <DialogFooter>
+          <Button variant="outline" className="w-full" disabled={isPending}>
             Cancel
           </Button>
           <Button
             variant="destructive"
-            className="xs:w-fit w-full"
+            className="w-full"
             disabled={isPending}
             onClick={() => mutate()}
           >

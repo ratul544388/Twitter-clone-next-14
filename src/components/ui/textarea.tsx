@@ -36,7 +36,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <p
             className={cn(
-              "absolute top-1/2 left-2 text-muted-foreground -translate-y-1/2 text-sm peer-focus:top-3 peer-focus:text-xs transition-all peer-focus:text-primary",
+              "absolute top-6 left-2 text-muted-foreground -translate-y-1/2 text-sm peer-focus:top-3 peer-focus:text-xs transition-all peer-focus:text-primary",
               value && "top-3 text-xs"
             )}
           >

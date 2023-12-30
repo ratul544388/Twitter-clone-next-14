@@ -95,8 +95,10 @@ export const Post = ({
                   currentUser={currentUser}
                 />
               </div>
-              <p className="break-words">{post.caption}</p>
-              <MediaPreview tweet={tweet} />
+              <div className="space-y-2">
+                <p className="break-words">{post.caption}</p>
+                <MediaPreview tweet={tweet} />
+              </div>
             </div>
           </div>
           {tweet.tweet && tweet.isQuote && (

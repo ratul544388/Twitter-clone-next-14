@@ -20,7 +20,7 @@ export async function DELETE(
       data: {
         requestedUsers: {
           disconnect: {
-            userId: currentUser.id,
+            id: currentUser.id,
           },
         },
       },

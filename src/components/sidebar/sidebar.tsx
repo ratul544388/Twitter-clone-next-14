@@ -19,15 +19,11 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
   const routes = useRoutes({ currentUser });
-  const pathname = usePathname();
   const { onOpen } = useModal();
-
-  const communityId =
-    pathname.split("/")[1] === "communities" ? pathname.split("/")[2] : null;
 
   return (
     <div className={cn("border-r", className)}>
-      <div className="sticky h-screen inset-y-0 left-0 flex flex-col items-center sm:items-end xl:items-start sm:px-5 px-1 py-1">
+      <div className="sticky h-screen inset-y-0 left-0 flex flex-col items-center sm:items-end xl:items-start sm:px-5 px-1 py-1 overflow-y-auto">
         <div className="flex flex-col xl:w-full h-full">
           <Link href="/">
             <Icon
@@ -50,13 +46,13 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
             </Link>
           ))}
           <Button
-            onClick={() => onOpen("tweetModal", { communityId })}
-            className="p-0 rounded-full h-[52px] w-[52px] xl:h-auto xl:w-auto py-3 mt-2 hover:bg-sky-500/90 font-semibold"
+            onClick={() => onOpen("tweetModal")}
+            className="p-0 rounded-full min-h-[52px] min-w-[52px] xl:h-auto xl:w-auto py-3 mt-2 hover:bg-sky-500/90 font-semibold"
           >
             <p className="hidden xl:block">Tweet</p>
             <FaFeather size={18} className="xl:hidden" />
           </Button>
-          <div className="mt-auto flex flex-col gap-2 items-center xl:items-start">
+          <div className="mt-auto pt-5 flex flex-col gap-2 items-center xl:items-start">
             <ThemeToggler className="xl:ml-2" />
             <UserButton currentUser={currentUser} />
           </div>

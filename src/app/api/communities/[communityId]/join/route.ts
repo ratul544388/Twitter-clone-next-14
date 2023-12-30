@@ -19,18 +19,22 @@ export async function POST(
       },
     });
 
-    const isPrivate = community?.type === "PRIVATE";
+    if (!community) {
+      return new NextResponse("Community not found", { status: 400 });
+    }
+
+    const isPrivate = community.type === "PRIVATE";
 
     const response = await db.community.update({
       where: {
-        id: params.communityId,
+        id: community.id,
       },
       data: {
         ...(isPrivate
           ? {
               requestedUsers: {
                 connect: {
-                  userId: currentUser.id,
+                  id: currentUser.id,
                 },
               },
             }
