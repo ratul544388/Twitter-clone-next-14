@@ -35,6 +35,7 @@ export const getTweets = async ({
                   },
                 },
               },
+              isCommunity: false,
             }
           : type === "LIKES"
           ? {

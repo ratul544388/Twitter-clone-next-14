@@ -3,11 +3,7 @@
 import TweetInput from "@/components/tweet-input";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  FullUserType,
-  InitialTweetsType,
-  QueryType
-} from "@/types";
+import { FullUserType, InitialTweetsType, QueryType } from "@/types";
 import Link from "next/link";
 import { useState } from "react";
 import { Feed } from "./feed";
@@ -16,12 +12,12 @@ import { UserList } from "./user-list";
 
 interface HomePageClientProps {
   currentUser: FullUserType;
-  initialTweets?: InitialTweetsType;
+  hasPeopleToFollow?: boolean;
 }
 
 const HomePageClient: React.FC<HomePageClientProps> = ({
   currentUser,
-  initialTweets,
+  hasPeopleToFollow,
 }) => {
   const navigations: QueryType[] = ["FOR YOU", "FOLLOWING"];
   const [active, setActive] = useState<QueryType>("FOR YOU");
@@ -38,7 +34,7 @@ const HomePageClient: React.FC<HomePageClientProps> = ({
         currentUser={currentUser}
       />
       {active === "FOR YOU" && <TweetInput currentUser={currentUser} />}
-      {active === "FOLLOWING" && (
+      {active === "FOLLOWING" && hasPeopleToFollow && (
         <div className="lg:hidden">
           <UserList type="WHO_TO_FOLLOW" take={4} hasFollowButton loadOnces />
           <Link
@@ -55,7 +51,6 @@ const HomePageClient: React.FC<HomePageClientProps> = ({
       <Feed
         currentUser={currentUser}
         type={active}
-        initialTweets={initialTweets}
       />
     </div>
   );

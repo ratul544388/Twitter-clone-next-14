@@ -11,7 +11,6 @@ import { User } from "@prisma/client";
 import { Post } from "./post";
 
 interface FeedProps {
-  initialTweets?: InitialTweetsType;
   currentUser: User;
   type: QueryType;
   communityId?: string;
@@ -24,7 +23,6 @@ interface FeedProps {
 }
 
 export const Feed = ({
-  initialTweets,
   currentUser,
   type,
   communityId,
@@ -36,7 +34,6 @@ export const Feed = ({
 }: FeedProps) => {
   const { status, tweets, hasNextPage, isFetchingNextPage, isRefetching, ref } =
     useInfinityTweets({
-      initialTweets,
       type,
       limit,
       userId,
