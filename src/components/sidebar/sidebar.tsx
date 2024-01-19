@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
 
   return (
     <div className={cn("border-r", className)}>
-      <div className="sticky h-screen inset-y-0 left-0 flex flex-col items-center sm:items-end xl:items-start sm:px-5 px-1 py-1 overflow-y-auto">
+      <div className="sticky h-screen inset-y-0 left-0 flex flex-col items-center sm:items-end xl:items-start sm:px-5 px-1 py-1 overflow-y-auto scrollbar-thin">
         <div className="flex flex-col xl:w-full h-full">
           <Link href="/">
             <Icon

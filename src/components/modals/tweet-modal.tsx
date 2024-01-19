@@ -79,7 +79,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <Dialog open={isOpen && type === "tweetModal"} onOpenChange={handleClose}>
-      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col max-h-[100svh]">
+      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col h-[100svh] xs:max-h-[80svh]">
         {communityId && (
           <h1 className="absolute top-1 left-1/2 -translate-x-1/2">
             Community Post
@@ -88,7 +88,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex-1 flex-grow"
+            className="flex-1 flex-grow overflow-y-auto scrollbar-thin"
           >
             <div className="flex items-start">
               <Avatar image={currentUser?.image} />
@@ -100,7 +100,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
                     <FormControl>
                       <Textarea
                         placeholder="What's happening?!"
-                        className="max-h-[84svh]"
+                        className=""
                         value={field.value}
                         onChange={(e) => {
                           form.setValue("caption", e.target.value, {

@@ -32,7 +32,7 @@ export const Feed = ({
   q,
   limit,
 }: FeedProps) => {
-  const { status, tweets, hasNextPage, isFetchingNextPage, isRefetching, ref } =
+  const { status, tweets, hasNextPage, isFetchingNextPage, ref } =
     useInfinityTweets({
       type,
       limit,

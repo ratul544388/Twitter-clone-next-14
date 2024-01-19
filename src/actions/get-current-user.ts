@@ -1,8 +1,9 @@
-import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 import db from "@/lib/db";
 export default async function getCurrentUser() {
   try {
+
     const { userId } = auth();
 
     if (!userId) {

@@ -73,45 +73,46 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <Dialog open={isOpen && type === "replyModal"} onOpenChange={handleClose}>
-      <DialogContent className="px-4 pb-2 gap-2 pt-12 flex flex-col max-h-[100svh]">
-        {tweet && <PostOnReplyModal tweet={tweet} />}
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex-1 flex-grow"
-          >
-            <div className="flex items-start">
-              <Avatar image={currentUser?.image} />
-              <FormField
-                control={form.control}
-                name="caption"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <Textarea
-                        placeholder="What's happening?!"
-                        className="max-h-[30svh]"
-                        value={field.value}
-                        onChange={(e) => {
-                          form.setValue("caption", e.target.value, {
-                            shouldValidate: true,
-                          });
-                        }}
-                        rows={1}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+      <DialogContent className="px-4 pb-2 gap-2 pt-12 flex flex-col h-[100svh] xs:max-h-[80svh]">
+        <div className="flex-1 flex-grow overflow-y-auto scrollbar-thin">
+          {tweet && <PostOnReplyModal tweet={tweet} />}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <div className="flex items-start">
+                <Avatar image={currentUser?.image} />
+                <FormField
+                  control={form.control}
+                  name="caption"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <Textarea
+                          placeholder="What's happening?!"
+                          className="max-h-[30svh]"
+                          value={field.value}
+                          onChange={(e) => {
+                            form.setValue("caption", e.target.value, {
+                              shouldValidate: true,
+                            });
+                          }}
+                          rows={1}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <UploadPreview
+                value={media}
+                onChange={(value) =>
+                  form.setValue("media", value, { shouldValidate: true })
+                }
               />
-            </div>
-            <UploadPreview
-              value={media}
-              onChange={(value) =>
-                form.setValue("media", value, { shouldValidate: true })
-              }
-            />
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </div>
         <Separator />
         <div className="flex items-center justify-between">
           <div className="flex">

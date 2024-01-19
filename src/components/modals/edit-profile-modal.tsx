@@ -98,7 +98,7 @@ export const EditProfileModal = ({ currentUser }: { currentUser: User }) => {
       open={isOpen && type === "editProfileModal"}
       onOpenChange={handleClose}
     >
-      <DialogContent className="pb-2 px-0 gap-2 pt-12 flex flex-col max-h-[100svh]">
+      <DialogContent className="pb-2 px-0 gap-2 pt-12 flex flex-col h-[100svh] xs:max-h-[80svh]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
