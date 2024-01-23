@@ -79,7 +79,7 @@ export const TweetModal = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <Dialog open={isOpen && type === "tweetModal"} onOpenChange={handleClose}>
-      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col h-[100svh] xs:max-h-[80svh]">
+      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col max-h-[100svh] xs:max-h-[80svh]">
         {communityId && (
           <h1 className="absolute top-1 left-1/2 -translate-x-1/2">
             Community Post

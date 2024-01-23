@@ -40,25 +40,25 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
   const caption = form.getValues("caption");
   const media = form.getValues("media");
   const queryClient = useQueryClient();
-  const { tweet, communityId } = data;
+  const { tweet, quote, communityId, queryKey } = data;
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (tweet) {
-        await axios.patch(`/api/tweets/${tweet.id}`, {
+      if (quote) {
+        await axios.patch(`/api/tweets/${quote.id}`, {
           ...values,
-          communityId,
         });
       } else {
-        await axios.post("/api/tweets", {
+        await axios.post(`/api/tweets/${tweet?.id}/quote`, {
           ...values,
           communityId,
+          isqQuote: true,
         });
       }
-      toast.success(tweet ? "Tweet updated" : "Tweet posted");
-      queryClient.invalidateQueries(["FOR YOU"] as InvalidateQueryFilters);
+      toast.success(quote ? "Quote Updated" : "quote Posted");
+      queryClient.invalidateQueries([queryKey] as InvalidateQueryFilters);
       form.reset();
       onClose();
     } catch (error) {
@@ -76,7 +76,7 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
       open={isOpen && type === "quoteTweetModal"}
       onOpenChange={handleClose}
     >
-      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col h-[100svh] xs:max-h-[80svh]">
+      <DialogContent className="px-4 pb-2 gap-2 pt-10 flex flex-col h-[100svh] xs:h-auto xs:max-h-[80svh]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -92,7 +92,7 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
                     <FormControl>
                       <Textarea
                         placeholder="What's happening?!"
-                        className=""
+                        autoFocus
                         value={field.value}
                         onChange={(e) => {
                           form.setValue("caption", e.target.value, {
@@ -143,7 +143,7 @@ export const QuoteTweetModal = ({ currentUser }: { currentUser: User }) => {
               disabled={isLoading || !caption.trim()}
               onClick={form.handleSubmit(onSubmit)}
             >
-              Tweet
+              {quote ? "Save" : "Quote"}
             </Button>
           </div>
         </div>

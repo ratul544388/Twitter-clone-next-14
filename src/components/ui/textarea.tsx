@@ -24,7 +24,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className="relative">
         <textarea
           className={cn(
-            "flex w-full resize-none overflow-y-hidden rounded-md border-none bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "flex w-full resize-none overflow-y-hidden rounded-md border-none bg-background px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             label &&
               "peer ring-[1px] focus:ring-[2px] ring-input focus:ring-primary pl-2 pt-5 text-sm",
             limit && "pb-5",

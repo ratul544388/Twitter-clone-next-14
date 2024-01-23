@@ -15,7 +15,7 @@ export async function GET(
         retweets: true,
         likes: true,
         user: true,
-        tweet: {
+        mainTweet: {
           include: {
             user: true,
             likes: true,
@@ -41,6 +41,12 @@ export async function DELETE(
     if (!currentUser) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
+
+    await db.tweet.deleteMany({
+      where: {
+        mainTweetId: params.tweetId,
+      },
+    });
 
     const response = await db.tweet.delete({
       where: {

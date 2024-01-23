@@ -90,7 +90,15 @@ const RetweetButton: React.FC<RetweetButtonProps> = ({
           <Repeat2 className="h-4 w-4 mr-2" />
           {isRetweet ? "Undo retweet" : "Retweet"}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onOpen("quoteTweetModal", { tweet })}>
+        <DropdownMenuItem
+          onClick={() =>
+            onOpen("quoteTweetModal", {
+              tweet,
+              quote: tweet.mainTweet,
+              queryKey,
+            })
+          }
+        >
           <PencilLine className="h-4 w-4 mr-2" />
           Quote
         </DropdownMenuItem>

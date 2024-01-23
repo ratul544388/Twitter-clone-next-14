@@ -15,7 +15,7 @@ export type FullTweetType = Tweet & {
     blueBadgeSubscription: BlueBadgeSubscription | null;
   };
   community?: Community | null;
-  tweet?:
+  mainTweet?:
     | (Tweet & {
         user: User & {
           followers: Follow[];

@@ -46,18 +46,11 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (tweet) {
-        await axios.patch(`/api/tweets/${tweet.id}`, {
-          ...values,
-          communityId,
-        });
-      } else {
-        await axios.post("/api/tweets", {
-          ...values,
-          communityId,
-        });
-      }
-      toast.success(tweet ? "Tweet updated" : "Tweet posted");
+      await axios.post(`/api/tweets/${tweet?.id}/reply`, {
+        ...values,
+        tweetId: tweet?.id,
+      });
+      toast.success("Replied");
       queryClient.invalidateQueries(["FOR YOU"] as InvalidateQueryFilters);
       form.reset();
       onClose();
@@ -73,13 +66,11 @@ export const ReplyModal = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <Dialog open={isOpen && type === "replyModal"} onOpenChange={handleClose}>
-      <DialogContent className="px-4 pb-2 gap-2 pt-12 flex flex-col h-[100svh] xs:max-h-[80svh]">
+      <DialogContent className="px-4 pb-2 gap-2 pt-12 flex flex-col max-h-[100svh] xs:max-h-[80svh]">
         <div className="flex-1 flex-grow overflow-y-auto scrollbar-thin">
           {tweet && <PostOnReplyModal tweet={tweet} />}
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex items-start">
                 <Avatar image={currentUser?.image} />
                 <FormField

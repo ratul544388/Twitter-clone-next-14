@@ -32,7 +32,7 @@ export const Post = ({
 }: PostProps) => {
   const router = useRouter();
 
-  const post = tweet.isRetweet && tweet.tweet ? tweet.tweet : tweet;
+  const post = tweet.isRetweet && tweet.mainTweet ? tweet.mainTweet : tweet;
   const time = formatDistanceStrict(new Date(), new Date(tweet.createdAt));
 
   const formattedTime = time.split(" ")[0] + time.split(" ")[1].split("")[0];
@@ -42,7 +42,7 @@ export const Post = ({
       <div
         className={cn(
           "flex flex-col py-2 px-3 pb-1",
-          (tweet.isRetweet || tweet.isCommunity) && "pt-4",
+          (tweet.isRetweet || tweet.community) && "pt-4",
           className
         )}
       >
@@ -52,7 +52,7 @@ export const Post = ({
           }
         >
           <div className="absolute flex gap-3 top-0.5 left-[48px] line-clamp-1">
-            {tweet.isCommunity && (
+            {tweet.community && (
               <div className="text-sm flex gap-1 items-center text-muted-foreground">
                 <Users2 className="h-3 w-3" /> {tweet.community?.name}
               </div>
@@ -101,8 +101,8 @@ export const Post = ({
               </div>
             </div>
           </div>
-          {tweet.tweet && tweet.isQuote && (
-            <ViewOnlyPost tweet={tweet.tweet} className="ml-[50px]" />
+          {tweet.mainTweet && tweet.isQuote && (
+            <ViewOnlyPost tweet={tweet.mainTweet} className="ml-[50px]" />
           )}
         </div>
         <ReactSection

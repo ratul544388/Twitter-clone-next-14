@@ -35,7 +35,6 @@ export const getTweets = async ({
                   },
                 },
               },
-              isCommunity: false,
             }
           : type === "LIKES"
           ? {
@@ -45,14 +44,12 @@ export const getTweets = async ({
                 },
               },
               isReply: false,
-              isCommunity: false,
             }
           : type === "REPLIES" && userId
           ? {
               OR: [{ isRetweet: true }, { isQuote: true }],
               userId,
               isReply: false,
-              isCommunity: false,
             }
           : type === "MEDIA" && userId
           ? {
@@ -61,14 +58,13 @@ export const getTweets = async ({
               },
               userId,
               isReply: false,
-              isCommunity: false,
             }
           : type === "TWEETS" && userId
           ? {
               isReply: false,
               isQuote: false,
               isRetweet: false,
-              isCommunity: false,
+
               userId,
             }
           : type === "COMMUNITIES_TWEETS"
@@ -90,7 +86,6 @@ export const getTweets = async ({
           : type === "FOR YOU"
           ? {
               isReply: false,
-              isCommunity: false,
             }
           : type === "REPLIES" && userId
           ? {
@@ -166,8 +161,7 @@ export const getTweets = async ({
             blueBadgeSubscription: true,
           },
         },
-        community: true,
-        tweet: {
+        mainTweet: {
           include: {
             user: {
               include: {

@@ -186,7 +186,7 @@ export async function GET(req: Request) {
           },
         },
         community: true,
-        tweet: {
+        mainTweet: {
           include: {
             user: {
               include: {

@@ -25,7 +25,11 @@ const ShareButton: React.FC<ShareButtonProps> = ({ user }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center cursor-pointer group hover:text-sky-500 outline-none select-none">
-        <Icon icon={Share} className=" group-hover:bg-sky-50 dark:hover:bg-sky-900/20" iconSize={20} />
+        <Icon
+          icon={Share}
+          className=" group-hover:bg-sky-50 dark:hover:bg-sky-900/20"
+          iconSize={20}
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={handleCopy}>

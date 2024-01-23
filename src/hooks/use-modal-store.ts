@@ -1,5 +1,5 @@
 import { FullTweetType } from "@/types";
-import { Community, Member, User } from "@prisma/client";
+import { Community, Member, Tweet, User } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType =
@@ -21,6 +21,7 @@ export type ModalType =
 interface ModalData {
   user?: User;
   tweet?: FullTweetType;
+  quote?: Tweet & { user: User } | null;
   communityId?: string | null;
   community?: Community;
   member?: Member & {

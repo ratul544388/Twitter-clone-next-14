@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useFollowing } from "@/hooks/use-following";
 import { useModal } from "@/hooks/use-modal-store";
+import { cn } from "@/lib/utils";
 import { FullTweetType } from "@/types";
 import { User } from "@prisma/client";
 import { Edit, MoreHorizontal, Trash, UserCheck2, UserX2 } from "lucide-react";
@@ -47,6 +48,7 @@ const PostMenu: React.FC<PostMenuProps> = ({
         {currentUser.id === tweet.user.id ? (
           <>
             <DropdownMenuItem
+              className={cn(tweet.isQuote && "hidden")}
               onClick={() => onOpen("tweetModal", { tweet, queryKey })}
             >
               <Edit className="h-4 w-4 mr-2" />

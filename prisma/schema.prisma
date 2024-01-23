@@ -87,14 +87,13 @@ model Tweet {
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String   @db.ObjectId
 
-  retweets Tweet[] @relation("Retweets")
-  tweet    Tweet?  @relation("Retweets", fields: [tweetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tweetId  String? @db.ObjectId
+  retweets    Tweet[] @relation("Retweets")
+  mainTweet   Tweet?  @relation("Retweets", fields: [mainTweetId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mainTweetId String? @db.ObjectId
 
   isRetweet   Boolean @default(false)
   isReply     Boolean @default(false)
   isQuote     Boolean @default(false)
-  isCommunity Boolean @default(false)
 
   likedUserIds String[] @db.ObjectId
   likes        User[]   @relation("Like", fields: [likedUserIds], references: [id])

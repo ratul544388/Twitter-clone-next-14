@@ -1,5 +1,6 @@
 "use server";
 
+import TweetSkeletons from "@/components/skeletons/tweet-skeletons";
 import db from "@/lib/db";
 
 export const getTweet = async ({ tweetId }: { tweetId: string }) => {
@@ -17,7 +18,7 @@ export const getTweet = async ({ tweetId }: { tweetId: string }) => {
       community: true,
       likes: true,
       retweets: true,
-      tweet: {
+      mainTweet: {
         include: {
           user: {
             include: {
