@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         userId: currentUser.id,
         caption,
         media,
-        ...(communityId ? { communityId, isCommunity: true } : {}),
+        communityId,
       },
     });
 
@@ -65,14 +65,12 @@ export async function GET(req: Request) {
                 },
               },
               isReply: false,
-              isCommunity: false,
             }
           : type === "REPLIES" && userId
           ? {
               OR: [{ isRetweet: true }, { isQuote: true }],
               userId,
               isReply: false,
-              isCommunity: false,
             }
           : type === "MEDIA" && userId
           ? {
@@ -81,14 +79,12 @@ export async function GET(req: Request) {
               },
               userId,
               isReply: false,
-              isCommunity: false,
             }
           : type === "TWEETS" && userId
           ? {
               isReply: false,
               isQuote: false,
               isRetweet: false,
-              isCommunity: false,
               userId,
             }
           : type === "COMMUNITIES_TWEETS"
@@ -110,7 +106,6 @@ export async function GET(req: Request) {
           : type === "FOR YOU"
           ? {
               isReply: false,
-              isCommunity: false,
             }
           : type === "REPLIES" && userId
           ? {

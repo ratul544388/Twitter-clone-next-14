@@ -28,7 +28,7 @@ export const useInfinityTweets = ({
     isFetchingNextPage,
     isRefetching,
   } = useInfiniteQuery({
-    queryKey: [type],
+    queryKey: [type, communityId, q, userId, tweetId],
     //@ts-ignore
     queryFn: async ({ pageParam = undefined }) => {
       const response = await getTweets({
@@ -52,7 +52,6 @@ export const useInfinityTweets = ({
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-
 
   const tweets = data?.pages.flatMap((page: any) => page.items);
 

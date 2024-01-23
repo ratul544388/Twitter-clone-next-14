@@ -86,7 +86,7 @@ const TweetInput: React.FC<TweetInputProps> = ({ currentUser }) => {
                         shouldValidate: true,
                       });
                     }}
-                    rows={1}
+                    rows={2}
                   />
                 </FormControl>
               </FormItem>

@@ -42,7 +42,7 @@ export const Post = ({
       <div
         className={cn(
           "flex flex-col py-2 px-3 pb-1",
-          (tweet.isRetweet || tweet.community) && "pt-4",
+          (tweet.isRetweet || tweet.community) && "pt-6",
           className
         )}
       >
@@ -51,7 +51,7 @@ export const Post = ({
             router.push(`/${post.user.username}/status/${post.id}?from=post`)
           }
         >
-          <div className="absolute flex gap-3 top-0.5 left-[48px] line-clamp-1">
+          <div className="absolute flex gap-3 top-1.5 left-[48px] line-clamp-1">
             {tweet.community && (
               <div className="text-sm flex gap-1 items-center text-muted-foreground">
                 <Users2 className="h-3 w-3" /> {tweet.community?.name}

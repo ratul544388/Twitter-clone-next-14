@@ -35,6 +35,7 @@ export const getTweets = async ({
                   },
                 },
               },
+              community: null,
             }
           : type === "LIKES"
           ? {
@@ -44,12 +45,14 @@ export const getTweets = async ({
                 },
               },
               isReply: false,
+              community: null,
             }
           : type === "REPLIES" && userId
           ? {
               OR: [{ isRetweet: true }, { isQuote: true }],
               userId,
               isReply: false,
+              community: null,
             }
           : type === "MEDIA" && userId
           ? {
@@ -58,14 +61,15 @@ export const getTweets = async ({
               },
               userId,
               isReply: false,
+              community: null,
             }
           : type === "TWEETS" && userId
           ? {
               isReply: false,
               isQuote: false,
               isRetweet: false,
-
               userId,
+              community: null,
             }
           : type === "COMMUNITIES_TWEETS"
           ? {
@@ -86,6 +90,7 @@ export const getTweets = async ({
           : type === "FOR YOU"
           ? {
               isReply: false,
+              community: null,
             }
           : type === "REPLIES" && userId
           ? {
@@ -97,6 +102,7 @@ export const getTweets = async ({
                   isQuote: true,
                 },
               ],
+              community: null,
             }
           : type === "TWEET_REPLIES" && tweetId
           ? {
@@ -104,6 +110,7 @@ export const getTweets = async ({
               tweet: {
                 id: tweetId,
               },
+              community: null,
             }
           : (type === "TWEETS" || type === "MEDIA") && q
           ? {
@@ -133,11 +140,13 @@ export const getTweets = async ({
                   },
                 },
               ],
+              community: null,
               ...(type === "MEDIA"
                 ? {
                     media: {
                       isEmpty: false,
                     },
+                    community: null,
                   }
                 : {}),
             }

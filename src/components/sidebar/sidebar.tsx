@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, currentUser }) => {
           ))}
           <Button
             onClick={() => onOpen("tweetModal")}
-            className="p-0 rounded-full min-h-[52px] min-w-[52px] xl:h-auto xl:w-auto py-3 mt-2 hover:bg-sky-500/90 font-semibold"
+            className="p-0 rounded-full min-h-[48px] min-w-[48px] xl:h-auto xl:w-auto py-3 mt-2 hover:bg-sky-500/90 font-semibold"
           >
             <p className="hidden xl:block">Tweet</p>
             <FaFeather size={18} className="xl:hidden" />

@@ -12,6 +12,7 @@ import { EditProfileButton } from "../_components/edit-profile-button";
 import ProfileTweets from "../_components/profile-tweets";
 import { BiSolidBadgeCheck } from "react-icons/bi";
 import { checkBlueBadgeSubscription } from "@/lib/blue-badge-subscription";
+import { Feed } from "@/app/(main)/_components/feed";
 
 const UsernamePage = async ({ params }: { params: { username: string } }) => {
   const user = await db.user.findUnique({
