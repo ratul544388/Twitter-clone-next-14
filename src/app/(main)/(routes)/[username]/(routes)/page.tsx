@@ -26,21 +26,22 @@ const UsernamePage = async ({ params }: { params: { username: string } }) => {
     },
   });
 
-  const tweetCount = await db.tweet
-    .findMany({
-      where: {
-        isRetweet: false,
-        isReply: false,
-        isQuote: false,
-      },
-    })
-    .then((res) => res.length);
-
   const currentUser = await getCurrentUser();
 
   if (!user) {
     redirect("/");
   }
+
+  const tweetCount = await db.tweet
+  .findMany({
+    where: {
+      isRetweet: false,
+      isReply: false,
+      isQuote: false,
+      userId: user.id,
+    },
+  })
+  .then((res) => res.length);
 
   return (
     <main className="flex flex-col w-full">
